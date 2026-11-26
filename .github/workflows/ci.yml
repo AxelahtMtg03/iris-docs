@@ -1,0 +1,51 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff black
+      - run: ruff check .
+      - run: black --check .
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux : parcours complet, avec LibreOffice, Tesseract et les modèles.
+          - { os: ubuntu-latest, python: "3.10", full: true }
+          - { os: ubuntu-latest, python: "3.13", full: true }
+          - { os: windows-latest, python: "3.12", full: false }
+          - { os: macos-latest, python: "3.12", full: false }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: LibreOffice et Tesseract
+        if: matrix.full
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreoffice-writer fonts-liberation tesseract-ocr tesseract-ocr-fra tesseract-ocr-spa
+      - name: PyTorch sans carte graphique
+        if: runner.os == 'Linux'
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -r requirements-dev.txt
+      - name: Modèles de langue
+        if: matrix.full
+        run: python -m iris models install
+      - run: python -m pytest -v
