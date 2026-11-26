@@ -38,11 +38,24 @@ python run.py
 Au premier lancement, ouvre **Langues installées** et clique sur **Installer** (environ 600 Mo
 pour les deux paires). C'est la seule fois où Iris utilise internet.
 
+### L'installer comme une application
+
+Pour ouvrir Iris d'un double-clic, sans terminal :
+
+```bash
+python -m iris install
+```
+
+Un raccourci « Iris » apparaît dans le menu Démarrer et sur le bureau (Windows), ou dans le menu
+des applications (Linux). Il s'appuie sur ce dossier : ne le déplace pas, ou relance la commande
+après l'avoir déplacé. `python -m iris uninstall` retire les raccourcis. Sur macOS, utilise
+`python run.py`.
+
 ### Deux logiciels à ajouter
 
 | Logiciel | Sert à | Windows | macOS | Linux (Debian, Ubuntu) |
 | --- | --- | --- | --- | --- |
-| LibreOffice | créer des PDF | `winget install TheDocumentFoundation.LibreOffice` | `brew install --cask libreoffice` | `sudo apt install libreoffice-writer` |
+| LibreOffice | créer un PDF depuis un Word ou un scan | `winget install TheDocumentFoundation.LibreOffice` | `brew install --cask libreoffice` | `sudo apt install libreoffice-writer` |
 | Tesseract | lire les PDF scannés | `winget install UB-Mannheim.TesseractOCR` | `brew install tesseract tesseract-lang` | `sudo apt install tesseract-ocr tesseract-ocr-fra tesseract-ocr-spa` |
 
 Sous Windows, l'installeur de Tesseract n'ajoute que l'anglais par défaut. Coche le français et
@@ -93,9 +106,12 @@ python -m iris models install
   être traduits à tort.
 - **Non traduits** : adresses web, courriels, code, nombres, champs de fusion, commentaires,
   texte contenu dans les images, graphiques et SmartArt.
-- **PDF** : ce format n'est pas fait pour être modifié. La mise en page est *reconstruite* et
-  peut différer, surtout avec des colonnes ou des tableaux complexes : un tableau imbriqué peut
-  être décalé ou rogné.
+- **PDF traduit en PDF** (le mieux) : chaque paragraphe est réécrit à sa place. Images, schémas,
+  filets, numéros et pages ne bougent pas. La police est remplacée par une police proche, et un
+  passage plus long que l'original peut être légèrement réduit (le rapport le signale). Les
+  formules mathématiques et le texte contenu dans les images ne sont pas traduits.
+- **PDF vers Word** : ce format n'est pas fait pour être modifié. La mise en page est
+  *reconstruite* et peut différer, surtout avec des colonnes ou des tableaux complexes.
 - **PDF scannés** : seul le texte est récupéré ; images, tableaux et mise en forme sont perdus.
 - **Fichiers** : `.docx` et `.pdf` uniquement, sans mot de passe, 100 Mo par défaut.
 

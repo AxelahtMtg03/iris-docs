@@ -13,7 +13,7 @@ window.IRIS_I18N = {
     layoutText: 'Dans un document Word, polices, marges, images et tableaux restent en place : seul le texte change. Un texte plus long peut déplacer des sauts de ligne, et Iris te le signale.',
     offlineTitle: 'Hors-ligne.', offlineText: 'Les modèles de langue se téléchargent une seule fois. Ensuite, coupe le réseau : tout fonctionne.',
     price: '0 €', freeText: 'Gratuit et open source. Pas de compte, pas de clé d\'API, pas de limite de caractères.',
-    formatsTitle: 'Word et PDF.', formatsText: 'Les .docx sont traités directement. Les PDF passent par un document Word intermédiaire, et les scans sont lus par reconnaissance de caractères.',
+    formatsTitle: 'Word et PDF.', formatsText: 'Les .docx sont traités directement. Un PDF traduit garde ses pages : chaque paragraphe est réécrit à sa place. Les scans sont lus par reconnaissance de caractères.',
     convertTitle: 'Convertir, tout simplement.', convertText: 'Word vers PDF ou PDF vers Word, sans rien traduire. La traduction est une option que tu actives quand tu en as besoin.',
     privateTitle: 'Local et privé.', privateText: 'Tes fichiers ne quittent jamais ton ordinateur. Aucun serveur distant, aucune statistique, aucun suivi.',
     trioTitle: 'FR · EN · ES', trioText: 'Six sens de traduction avec deux paires de modèles, et une interface dans les trois langues.',
@@ -25,7 +25,7 @@ window.IRIS_I18N = {
     getTitle: 'Prends-le.', getText: 'Gratuit et open source. Récupère le projet avec Git, puis lance-le comme une appli ou une page locale. Il faut Python 3.10 ou plus.',
     getTools: 'Pour créer des PDF, installe LibreOffice ; pour lire les scans, Tesseract OCR.',
     commandsLabel: 'Commandes d\'installation', copy: 'Copier', copied: 'Commandes copiées.', copyFailed: 'Copie impossible : sélectionne le texte.',
-    zip: 'Télécharger le ZIP', soon: 'Application de bureau à double-cliquer : à venir.',
+    zip: 'Télécharger le ZIP', soon: 'Pour un raccourci sur le bureau : python -m iris install',
     license: 'Licence MIT', repo: 'Dépôt', bug: 'Signaler un bug'
   },
   en: {
@@ -42,7 +42,7 @@ window.IRIS_I18N = {
     layoutText: 'In a Word document, fonts, margins, images and tables stay put: only the text changes. Longer text may move line breaks, and Iris tells you.',
     offlineTitle: 'Offline.', offlineText: 'Language models are downloaded only once. After that, unplug the network: everything works.',
     price: '€0', freeText: 'Free and open source. No account, no API key, no character limit.',
-    formatsTitle: 'Word and PDF.', formatsText: '.docx files are processed directly. PDFs go through an intermediate Word document, and scans are read with character recognition.',
+    formatsTitle: 'Word and PDF.', formatsText: '.docx files are processed directly. A translated PDF keeps its pages: each paragraph is rewritten in place. Scans are read with character recognition.',
     convertTitle: 'Just convert.', convertText: 'Word to PDF or PDF to Word, without translating anything. Translation is an option you switch on when you need it.',
     privateTitle: 'Local and private.', privateText: 'Your files never leave your computer. No remote server, no analytics, no tracking.',
     trioTitle: 'FR · EN · ES', trioText: 'Six translation directions from two model pairs, and an interface in all three languages.',
@@ -54,7 +54,7 @@ window.IRIS_I18N = {
     getTitle: 'Take it.', getText: 'Free and open source. Get the project with Git, then run it as an app or a local page. You need Python 3.10 or later.',
     getTools: 'To create PDFs, install LibreOffice; to read scans, Tesseract OCR.',
     commandsLabel: 'Installation commands', copy: 'Copy', copied: 'Commands copied.', copyFailed: 'Could not copy: select the text.',
-    zip: 'Download the ZIP', soon: 'Double-click desktop app: coming later.',
+    zip: 'Download the ZIP', soon: 'For a desktop shortcut: python -m iris install',
     license: 'MIT licence', repo: 'Repository', bug: 'Report a bug'
   },
   es: {
@@ -71,7 +71,7 @@ window.IRIS_I18N = {
     layoutText: 'En un documento Word, las fuentes, márgenes, imágenes y tablas no se mueven: solo cambia el texto. Un texto más largo puede desplazar saltos de línea, e Iris te avisa.',
     offlineTitle: 'Sin conexión.', offlineText: 'Los modelos de idioma se descargan una sola vez. Después, desconecta la red: todo funciona.',
     price: '0 €', freeText: 'Gratis y de código abierto. Sin cuenta, sin clave de API, sin límite de caracteres.',
-    formatsTitle: 'Word y PDF.', formatsText: 'Los .docx se procesan directamente. Los PDF pasan por un documento Word intermedio y los escaneados se leen con reconocimiento de caracteres.',
+    formatsTitle: 'Word y PDF.', formatsText: 'Los .docx se procesan directamente. Un PDF traducido conserva sus páginas: cada párrafo se reescribe en su sitio. Los escaneados se leen con reconocimiento de caracteres.',
     convertTitle: 'Convertir, sin más.', convertText: 'De Word a PDF o de PDF a Word, sin traducir nada. La traducción es una opción que activas cuando la necesitas.',
     privateTitle: 'Local y privado.', privateText: 'Tus archivos nunca salen de tu ordenador. Sin servidor remoto, sin estadísticas, sin seguimiento.',
     trioTitle: 'FR · EN · ES', trioText: 'Seis direcciones de traducción con dos pares de modelos, y una interfaz en los tres idiomas.',
@@ -83,7 +83,7 @@ window.IRIS_I18N = {
     getTitle: 'Llévatelo.', getText: 'Gratis y de código abierto. Descarga el proyecto con Git y ejecútalo como aplicación o página local. Necesitas Python 3.10 o superior.',
     getTools: 'Para crear PDF, instala LibreOffice; para leer escaneados, Tesseract OCR.',
     commandsLabel: 'Comandos de instalación', copy: 'Copiar', copied: 'Comandos copiados.', copyFailed: 'No se pudo copiar: selecciona el texto.',
-    zip: 'Descargar el ZIP', soon: 'Aplicación de escritorio con doble clic: próximamente.',
+    zip: 'Descargar el ZIP', soon: 'Para un acceso directo en el escritorio: python -m iris install',
     license: 'Licencia MIT', repo: 'Repositorio', bug: 'Informar de un error'
   }
 };

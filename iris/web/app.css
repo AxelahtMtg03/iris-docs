@@ -290,10 +290,26 @@ pre { margin: 0; max-height: 220px; overflow: auto; padding: 12px; border-radius
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
+/* ---------- Fenêtre de bureau : l'application seule, bord à bord ---------- */
+html.desktop, html.desktop body { overflow: hidden; }
+html.desktop .stage { padding: 0; height: 100vh; height: 100dvh; min-height: 0; }
+html.desktop .zone { max-width: none; height: 100%; gap: 0; }
+html.desktop .back, html.desktop .titlebar .dot, html.desktop .titlebar .name { display: none; }
+html.desktop .win { height: 100%; display: flex; flex-direction: column; border: 0; border-radius: 0; box-shadow: none; animation: none; }
+html.desktop .titlebar { position: absolute; top: 14px; right: 22px; z-index: 5; padding: 0; border: 0; }
+html.desktop .layout { flex: 1; min-height: 0; }
+html.desktop .side { overflow-y: auto; }
+html.desktop .main { overflow-y: auto; }
+html.desktop .view > * , html.desktop #notice { width: 100%; max-width: 980px; margin-left: auto; margin-right: auto; }
+html.desktop .view .view > * { max-width: none; }
+
 /* ---------- Petits et grands écrans ---------- */
 @media (max-width: 859px) {
   .stage { padding: 24px 16px; }
   .layout { flex-direction: column; }
+  html.desktop .layout { overflow-y: auto; }
+  html.desktop .side, html.desktop .main { overflow: visible; flex-shrink: 0; }
+  html.desktop .titlebar { top: 10px; right: 12px; }
   .side { flex: none; padding: 16px; border-right: 0; border-bottom: 1px solid rgba(var(--wr), 0.1); }
   .brand { padding: 0 4px 8px; }
   .nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -316,5 +332,5 @@ pre { margin: 0; max-height: 220px; overflow: auto; padding: 12px; border-radius
   .dz-actions, .dz-actions .btn { width: 100%; }
   .foot { padding: 12px 16px; }
 }
-@media (min-width: 2200px) { html { zoom: 1.4; } .stage { min-height: calc(100vh / 1.4); } }
-@media (min-width: 3200px) { html { zoom: 1.9; } .stage { min-height: calc(100vh / 1.9); } }
+@media (min-width: 2200px) { html:not(.desktop) { zoom: 1.4; } html:not(.desktop) .stage { min-height: calc(100vh / 1.4); } }
+@media (min-width: 3200px) { html:not(.desktop) { zoom: 1.9; } html:not(.desktop) .stage { min-height: calc(100vh / 1.9); } }

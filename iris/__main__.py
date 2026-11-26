@@ -1,4 +1,4 @@
-"""Ligne de commande : python -m iris convert | translate | models | serve."""
+"""Ligne de commande : python -m iris convert | translate | models | serve | install."""
 
 from __future__ import annotations
 
@@ -7,7 +7,16 @@ import sys
 import threading
 from pathlib import Path
 
-from . import LANGS, convert, docx_inplace, models, pipeline, storage, translate
+from . import (
+    LANGS,
+    convert,
+    desktop,
+    docx_inplace,
+    models,
+    pipeline,
+    storage,
+    translate,
+)
 from .errors import Cancelled, IrisError
 
 
@@ -61,6 +70,8 @@ def main(argv: list[str] | None = None) -> int:
     packages.add_argument("pair", nargs="*", choices=[[], *models.PAIRS])
 
     commands.add_parser("serve", help="lancer l'application", add_help=False)
+    commands.add_parser("install", help="ajouter Iris au menu et au bureau")
+    commands.add_parser("uninstall", help="retirer les raccourcis")
 
     args, rest = parser.parse_known_args(argv)
     if args.command in (None, "serve"):
@@ -72,6 +83,16 @@ def main(argv: list[str] | None = None) -> int:
         parser.error(f"arguments inconnus : {' '.join(rest)}")
 
     storage.setup_logging()
+    if args.command in ("install", "uninstall"):
+        try:
+            changed = getattr(desktop, args.command)()
+        except OSError as exc:
+            print(f"Erreur : {exc}", file=sys.stderr)
+            return 1
+        verb = "Créé" if args.command == "install" else "Supprimé"
+        for path in changed:
+            print(f"{verb} : {path.strip()}")
+        return 0
     try:
         if args.command == "models":
             if args.action == "list":

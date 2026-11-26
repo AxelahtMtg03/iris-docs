@@ -5,13 +5,14 @@ from __future__ import annotations
 import argparse
 import logging
 import socket
+import sys
 import threading
 import webbrowser
 from typing import Any
 
 from werkzeug.serving import make_server
 
-from . import storage, system
+from . import desktop, storage, system
 from .server import create_app
 
 HOST = "127.0.0.1"
@@ -50,6 +51,9 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--no-open", action="store_true", help="ne rien ouvrir, afficher l'adresse")
     parser.add_argument("--port", type=int, default=PORT)
     args = parser.parse_args(argv)
+    if sys.stdout is None:  # lancé sans console (pythonw) : les messages vont dans un fichier
+        console = open(storage.data_dir() / "console.log", "w", encoding="utf-8")  # noqa: SIM115
+        sys.stdout = sys.stderr = console
 
     webview = None
     if not (args.browser or args.no_open):
@@ -70,13 +74,18 @@ def main(argv: list[str] | None = None) -> None:
         if webview is not None:
             try:
                 window = webview.create_window(
-                    "Iris", url, width=1180, height=880, min_size=(360, 560)
+                    "Iris",
+                    url + "&d=1",  # présentation « application » : sans décor autour
+                    width=1180,
+                    height=880,
+                    min_size=(360, 560),
+                    background_color="#0E1222",
                 )
                 picker["call"] = _window_picker(window, webview)
                 webview.settings["ALLOW_DOWNLOADS"] = True
                 # shortcut: un fichier glissé dans la fenêtre est envoyé sans son chemin ;
                 # lire `pywebviewFullPath` si l'enregistrement à côté de la source est voulu.
-                webview.start()
+                webview.start(icon=str(desktop.ICONS / "iris.ico"))
                 return
             except Exception:  # pas de moteur d'affichage : on se rabat sur le navigateur
                 log.exception("Fenêtre indisponible, ouverture dans le navigateur")

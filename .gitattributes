@@ -4,3 +4,4 @@ design-reference/** -text
 *.docx binary
 *.pdf binary
 *.png binary
+*.ico binary
