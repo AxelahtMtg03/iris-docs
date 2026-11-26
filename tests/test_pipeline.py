@@ -183,7 +183,8 @@ def test_cancel_libreoffice_then_restart(sample_docx, tmp_path):
 
     def progress(fraction, stage):
         if stage == "docx_to_pdf":
-            threading.Timer(0.8, event.set).start()
+            # assez tôt pour une machine rapide : LibreOffice met plus longtemps à démarrer
+            threading.Timer(0.1, event.set).start()
 
     with pytest.raises(Cancelled):
         pipeline.run(request(sample_docx, "pdf", tmp_path), progress, event)
