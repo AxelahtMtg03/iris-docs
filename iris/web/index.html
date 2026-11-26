@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iris — Application</title>
+<script src="theme.js"></script>
+<link rel="icon" href="icons/iris.svg" type="image/svg+xml">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="stage">
+<div class="blob blob-a glw" aria-hidden="true"></div>
+<div class="blob blob-b glw" aria-hidden="true"></div>
+
+<div class="zone">
+<a href="vitrine/" class="back" data-i18n="back">← Retour à la vitrine</a>
+
+<div class="glass win rise">
+
+<div class="titlebar">
+  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+  <span class="name">Iris</span>
+  <button type="button" id="themeBtn" class="theme-btn" data-i18n-label="themeToggle" aria-label="Changer de thème">
+    <span class="i-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span>
+    <span class="i-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span>
+  </button>
+</div>
+
+<div class="layout">
+
+<aside class="side">
+  <div class="brand">
+    <svg viewBox="0 0 64 64" width="30" height="30" aria-hidden="true"><path d="M32 4C44 18 44 42 32 56C20 42 20 18 32 4Z" fill="currentColor"/><path class="vein" d="M32 14V62" fill="none" stroke-width="3.5" stroke-linecap="round"/></svg>
+    <span>Iris</span>
+  </div>
+  <nav class="nav" data-i18n-label="navLabel" aria-label="Sections">
+    <button type="button" data-view="document" aria-current="page" data-i18n="navDocument">Document</button>
+    <button type="button" data-view="history" data-i18n="navHistory">Historique</button>
+    <button type="button" data-view="languages" data-i18n="navLanguages">Langues installées</button>
+    <button type="button" data-view="settings" data-i18n="navSettings">Réglages</button>
+  </nav>
+</aside>
+
+<main class="main">
+
+<!-- ================= Document ================= -->
+<section class="view" id="view-document" tabindex="-1">
+  <h1 class="grad" data-i18n="titleDocument">Convertir un document</h1>
+
+  <div id="notice" class="card error" role="alert" hidden>
+    <strong id="noticeText"></strong>
+    <details id="noticeDetails" hidden><summary data-i18n="technical">Détail technique</summary><pre id="noticeDetail"></pre></details>
+  </div>
+
+  <div id="noFile" class="dz">
+    <div class="dz-icon bob"><svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5"/><path d="m7 9 5-5 5 5"/><path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg></div>
+    <strong id="dzTitle" aria-live="polite">Dépose ton document ici</strong>
+    <span class="sub" data-i18n="dropSub">Word (.docx) ou PDF : tu choisis ensuite le format, et la traduction si besoin</span>
+    <div class="dz-actions">
+      <button type="button" class="btn btn-primary" data-pick="docx" data-i18n="browseWord">Parcourir… (Word)</button>
+      <button type="button" class="btn" data-pick="pdf" data-i18n="browsePdf">Parcourir… (PDF)</button>
+    </div>
+    <span class="note" data-i18n="staysLocal">Le fichier reste sur ton ordinateur.</span>
+  </div>
+  <input type="file" id="fileInput" accept=".docx,.pdf" class="sr" tabindex="-1" aria-hidden="true">
+
+  <div id="hasFile" class="view" hidden>
+    <div class="filebar">
+      <span id="srcExt" class="badge"></span>
+      <span id="fileName" class="filename"></span>
+      <span id="fileSize" class="filesize"></span>
+      <button type="button" class="link" id="removeFile" data-i18n="changeFile">Changer de fichier</button>
+    </div>
+
+    <div class="pages">
+      <div class="glass sheet">
+        <span id="srcLabel" class="tag tag-amber"></span>
+        <strong id="srcT"></strong>
+        <span id="srcB" class="excerpt"></span>
+        <div class="line"></div><div class="line w70"></div><div class="line w85"></div>
+      </div>
+      <div class="flip-wrap">
+        <div id="flip" class="flip">
+          <div class="face face-front glass sheet">
+            <span id="dstLabel" class="tag"></span>
+            <div id="idleBox" class="view">
+              <span class="excerpt" data-i18n="outputPlaceholder">Le fichier de sortie apparaîtra ici.</span>
+              <div class="line faint"></div><div class="line faint w70"></div><div class="line faint w85"></div>
+            </div>
+            <div id="runBox" class="running" hidden>
+              <div class="running-text"><span class="spinner" aria-hidden="true"></span><span id="runText"></span></div>
+              <div class="bar" id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-labelledby="runText"><div id="progressFill"></div></div>
+              <span id="percent" class="percent"></span>
+            </div>
+          </div>
+          <div class="face face-back glass sheet">
+            <span id="dstLabel2" class="tag tag-sky"></span>
+            <strong id="dstT"></strong>
+            <span id="dstB" class="excerpt"></span>
+            <div class="line"></div><div class="line w70"></div><div class="line w85"></div>
+          </div>
+        </div>
+      </div>
+      <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="field" role="group" aria-labelledby="fmtLabel">
+      <span class="label" id="fmtLabel" data-i18n="step1">1 · Format de sortie</span>
+      <div id="fmtPills" class="pills"></div>
+    </div>
+
+    <div id="tradBox" class="trad">
+      <div class="row-between">
+        <div class="stack">
+          <span class="label" data-i18n="step2">2 · Optionnel</span>
+          <strong id="tradLabel" data-i18n="alsoTranslate">Traduire aussi le contenu</strong>
+        </div>
+        <button type="button" id="sw" class="switch" role="switch" aria-checked="false" aria-labelledby="tradLabel"></button>
+      </div>
+      <div id="tradOpts" class="trad-opts rise" hidden>
+        <div class="field" role="group" aria-labelledby="fromLabel">
+          <span class="label" id="fromLabel" data-i18n="from">De</span>
+          <div id="srcPills" class="pills"></div>
+        </div>
+        <button type="button" id="swap" class="swap" data-i18n-label="swap" aria-label="Inverser les langues"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 3 8l4 4"/><path d="M3 8h14"/><path d="m17 20 4-4-4-4"/><path d="M21 16H7"/></svg></button>
+        <div class="field" role="group" aria-labelledby="toLabel">
+          <span class="label" id="toLabel" data-i18n="to">Vers</span>
+          <div id="dstPills" class="pills"></div>
+        </div>
+      </div>
+      <span id="notTrad" class="hint" data-i18n="notTranslating">Désactivé : la langue du document ne change pas.</span>
+    </div>
+
+    <div id="blocker" class="card warn" hidden>
+      <span id="blockerText" class="hint"></span>
+      <div><button type="button" class="btn" id="blockerBtn" data-i18n="goLanguages">Installer la langue</button></div>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="start" class="btn btn-primary btn-start"></button>
+      <span id="cant" class="chip-state" data-i18n="cant" hidden>Choisis un format ou active la traduction</span>
+      <span id="runBtn" class="chip-state" hidden></span>
+      <button type="button" id="cancel" class="btn" data-i18n="cancel" hidden>Annuler</button>
+      <div id="doneBox" class="actions" hidden>
+        <span id="outName" class="done-name"></span>
+        <button type="button" class="btn btn-amber" id="openDir" data-i18n="openFolder">Ouvrir le dossier</button>
+        <button type="button" class="btn" id="download" data-i18n="download">Télécharger</button>
+        <button type="button" id="reset" class="link" data-i18n="another">Un autre fichier</button>
+      </div>
+    </div>
+    <span id="outHint" class="hint" aria-live="polite"></span>
+
+    <div id="report" class="card rise" hidden>
+      <h2 data-i18n="reportTitle">Aperçu de fidélité</h2>
+      <ul id="counts" class="counts"></ul>
+      <ul id="warnings" class="warnings"></ul>
+      <span id="noWarning" class="hint" data-i18n="noWarning">Aucun point à vérifier n'a été détecté.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Historique ================= -->
+<section class="view" id="view-history" tabindex="-1" hidden>
+  <div class="row-between">
+    <h1 class="grad" data-i18n="titleHistory">Historique</h1>
+    <button type="button" class="link" id="clearHistory" data-i18n="clearAll">Tout effacer</button>
+  </div>
+  <div id="historyEmpty" class="empty" data-i18n="historyEmpty" hidden>Aucune conversion pour l'instant.</div>
+  <ul id="historyList" class="list"></ul>
+</section>
+
+<!-- ================= Langues ================= -->
+<section class="view" id="view-languages" tabindex="-1" hidden>
+  <h1 class="grad" data-i18n="titleLanguages">Langues installées</h1>
+  <p class="hint" data-i18n="languagesIntro">Le téléchargement d'un modèle demande internet une seule fois. Ensuite, tout fonctionne hors-ligne.</p>
+  <ul id="modelList" class="list"></ul>
+</section>
+
+<!-- ================= Réglages ================= -->
+<section class="view" id="view-settings" tabindex="-1" hidden>
+  <h1 class="grad" data-i18n="titleSettings">Réglages</h1>
+
+  <div class="card field" role="group" aria-labelledby="themeLabel">
+    <span class="label" id="themeLabel" data-i18n="theme">Thème</span>
+    <div class="pills" id="themePills"></div>
+  </div>
+  <div class="card field" role="group" aria-labelledby="langLabel">
+    <span class="label" id="langLabel" data-i18n="uiLanguage">Langue de l'interface</span>
+    <div class="pills" id="langPills"></div>
+  </div>
+  <div class="card field" role="group" aria-labelledby="outLabel">
+    <span class="label" id="outLabel" data-i18n="outFolder">Dossier de sortie</span>
+    <div class="pills" id="outPills"></div>
+    <div class="inline" id="outRow" hidden>
+      <input type="text" class="input wide" id="outPath" spellcheck="false" aria-labelledby="outLabel">
+      <button type="button" class="btn" id="outBrowse" data-i18n="choose">Choisir…</button>
+    </div>
+    <span class="hint" id="outHelp"></span>
+  </div>
+  <div class="card">
+    <div class="row-between">
+      <span id="openAfterLabel" data-i18n="openAfter">Ouvrir le dossier après la conversion</span>
+      <button type="button" class="switch" id="openAfter" role="switch" aria-checked="false" aria-labelledby="openAfterLabel"></button>
+    </div>
+  </div>
+  <div class="card field" role="group" aria-labelledby="ocrLabel">
+    <span class="label" id="ocrLabel" data-i18n="ocr">Reconnaissance de texte (OCR) sur les PDF scannés</span>
+    <div class="pills" id="ocrPills"></div>
+  </div>
+  <div class="card field">
+    <label class="label" for="maxMb" data-i18n="maxSize">Taille maximale d'un fichier (Mo)</label>
+    <input type="number" class="input short" id="maxMb" min="1" max="2000" step="1">
+  </div>
+  <div class="card">
+    <h2 data-i18n="tools">Outils détectés</h2>
+    <div class="statuses" id="toolList"></div>
+    <span class="hint" id="toolHelp"></span>
+    <span class="hint" id="about"></span>
+  </div>
+</section>
+
+</main>
+</div>
+
+<div class="foot"><span id="engine"></span><span id="footR"></span></div>
+</div>
+</div>
+</div>
+
+<div id="fatal" class="fatal" role="alertdialog" aria-modal="true" aria-labelledby="fatalText" hidden><p id="fatalText"></p></div>
+<div id="announce" class="sr" role="status" aria-live="polite"></div>
+
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
