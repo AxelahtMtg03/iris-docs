@@ -94,7 +94,8 @@ python -m iris models install
 - **Non traduits** : adresses web, courriels, code, nombres, champs de fusion, commentaires,
   texte contenu dans les images, graphiques et SmartArt.
 - **PDF** : ce format n'est pas fait pour être modifié. La mise en page est *reconstruite* et
-  peut différer, surtout avec des colonnes ou des tableaux complexes.
+  peut différer, surtout avec des colonnes ou des tableaux complexes : un tableau imbriqué peut
+  être décalé ou rogné.
 - **PDF scannés** : seul le texte est récupéré ; images, tableaux et mise en forme sont perdus.
 - **Fichiers** : `.docx` et `.pdf` uniquement, sans mot de passe, 100 Mo par défaut.
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import shutil
 import tempfile
 import threading
@@ -15,6 +16,7 @@ from .errors import Cancelled, IrisError
 from .report import Report
 from .storage import session_tmp
 
+log = logging.getLogger("iris")
 Progress = Callable[[float, str], None]
 _WEIGHTS = {"pdf_to_docx": 30, "ocr": 60, "translate": 60, "docx_to_pdf": 25, "save": 2}
 
@@ -36,6 +38,7 @@ class Result:
     output: Path
     report: Report
     duration: float
+    preview: tuple[str, str] = ("", "")  # titre et début du texte produit
 
 
 def save_unique(produced: Path, folder: Path, stem: str, ext: str) -> Path:
@@ -59,6 +62,16 @@ def save_unique(produced: Path, folder: Path, stem: str, ext: str) -> Path:
     except OSError as exc:
         raise IrisError("write_failed", str(exc), folder=str(folder)) from exc
     return candidate
+
+
+def _preview(document: Path) -> tuple[str, str]:
+    """Lu dans le Word, avant un éventuel export : le PDF mettrait l'en-tête en premier."""
+    try:
+        title, body, _ = docx_inplace.excerpt(document)
+    except Exception:  # l'aperçu est un bonus : il ne doit pas faire échouer la tâche
+        log.exception("Aperçu impossible")
+        return "", ""
+    return title, body
 
 
 def run(
@@ -157,6 +170,7 @@ def run(
                 report.warn("w_pdf_roundtrip")
             working = translated
         check()
+        preview = _preview(working)
 
         if target == "pdf":
             stage("docx_to_pdf")
@@ -178,4 +192,4 @@ def run(
         output = save_unique(working, request.out_dir or request.source.parent, stem, target)
         save(1.0)
 
-    return Result(output, report, time.monotonic() - started)
+    return Result(output, report, time.monotonic() - started, preview)

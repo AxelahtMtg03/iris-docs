@@ -382,10 +382,13 @@ def excerpt(path: Path, limit: int = 4000) -> tuple[str, str, str]:
     paragraphs = []
     size = 0
     for paragraph in body.iter(qn("w:p")):
-        text = "".join(node.text or "" for node in paragraph.iter(qn("w:t"))).strip()
-        if text:
-            paragraphs.append(text)
-            size += len(text)
+        text = "".join(
+            node.text or "" if node.tag == qn("w:t") else "\n"
+            for node in paragraph.iter(qn("w:t"), qn("w:br"))
+        )
+        for line in filter(None, map(str.strip, text.split("\n"))):
+            paragraphs.append(line)
+            size += len(line)
         if size >= limit:
             break
     title = paragraphs[0] if paragraphs else ""

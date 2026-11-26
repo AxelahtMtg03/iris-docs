@@ -14,6 +14,7 @@ import sys
 import threading
 import zipfile
 from collections.abc import Callable
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -297,6 +298,36 @@ def pdf_to_docx(source: Path, target: Path, cancel: threading.Event, progress: P
     )
     if not target.is_file():
         raise IrisError("convert_failed", "pdf2docx n'a produit aucun fichier")
+    _repair_links(target)
+
+
+def _repair_links(path: Path) -> None:
+    """pdf2docx place les liens à l'intérieur d'un bloc de texte, ce qui est interdit : Word
+    refuse le fichier et LibreOffice perd le texte du lien. On les remonte d'un niveau."""
+    from docx import Document
+    from docx.oxml.ns import qn
+
+    document = Document(str(path))
+    broken = [
+        link
+        for part in document.part.package.iter_parts()
+        if hasattr(part, "element")
+        for link in part.element.iter(qn("w:hyperlink"))
+        if link.getparent().tag == qn("w:r")
+    ]
+    for link in broken:
+        outer = link.getparent()
+        style = outer.find(qn("w:rPr"))
+        if style is not None:
+            for run in link.findall(qn("w:r")):
+                for old in run.findall(qn("w:rPr")):
+                    run.remove(old)
+                run.insert(0, deepcopy(style))
+        outer.addnext(link)
+        if all(child.tag == qn("w:rPr") for child in outer):
+            outer.getparent().remove(outer)
+    if broken:
+        document.save(str(path))
 
 
 def _pdf2docx(source: str, target: str) -> None:

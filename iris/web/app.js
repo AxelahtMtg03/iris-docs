@@ -360,7 +360,8 @@
       Object.keys(report.counts).forEach(function (key) {
         if (!report.counts[key] && key !== 'paragraphs') return;
         $('counts').appendChild(el('li', {}, [
-          el('b', { text: String(report.counts[key]) }), el('span', { text: t('c_' + key) })
+          el('b', { text: String(report.counts[key]) }),
+          el('span', { text: t((report.counts[key] === 1 ? 'c1_' : 'c_') + key) })
         ]));
       });
       $('counts').hidden = !$('counts').children.length;

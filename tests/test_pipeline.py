@@ -3,6 +3,7 @@ import threading
 import pytest
 from conftest import needs_models, needs_ocr, needs_office
 from docx import Document
+from docx.oxml.ns import qn
 
 from iris import convert, pipeline, storage
 from iris.errors import Cancelled, IrisError
@@ -118,6 +119,24 @@ def test_pdf_to_docx(sample_pdf, tmp_path):
     assert not leftovers()
 
 
+def test_pdf_links_stay_valid(tmp_path):
+    import pymupdf
+
+    source = tmp_path / "lien.pdf"
+    document = pymupdf.open()
+    page = document.new_page()
+    page.insert_text((72, 100), "Voir notre site officiel pour la suite.", fontsize=12)
+    area = page.search_for("notre site officiel")[0]
+    page.insert_link({"kind": pymupdf.LINK_URI, "from": area, "uri": "https://example.org"})
+    document.save(source)
+
+    result = pipeline.run(request(source, "docx", tmp_path))
+    body = Document(result.output).element.body
+    links = list(body.iter(qn("w:hyperlink")))
+    assert links and all(link.getparent().tag == qn("w:p") for link in links)
+    assert "notre site officiel" in "".join(p.text for p in Document(result.output).paragraphs)
+
+
 def test_cancel_external_process(sample_pdf, tmp_path):
     event = threading.Event()
     threading.Timer(0.2, event.set).start()
@@ -149,3 +168,17 @@ def test_pdf_to_translated_pdf(offline, sample_pdf, tmp_path):
     result = pipeline.run(request(sample_pdf, "pdf", tmp_path, translate=True, target_lang="es"))
     assert "empresa" in convert.pdf_info(result.output).text.lower()
     assert "w_pdf_roundtrip" in [w["code"] for w in result.report.warnings]
+
+
+@needs_office
+def test_cancel_libreoffice_then_restart(sample_docx, tmp_path):
+    event = threading.Event()
+
+    def progress(fraction, stage):
+        if stage == "docx_to_pdf":
+            threading.Timer(0.8, event.set).start()
+
+    with pytest.raises(Cancelled):
+        pipeline.run(request(sample_docx, "pdf", tmp_path), progress, event)
+    assert not leftovers()
+    assert pipeline.run(request(sample_docx, "pdf", tmp_path)).output.is_file()

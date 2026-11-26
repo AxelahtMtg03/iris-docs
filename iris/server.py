@@ -293,11 +293,6 @@ def create_app(
 
         def work(job: Job) -> None:
             result = pipeline.run(demand, job.update, job.cancel)
-            try:
-                title, text, _ = _excerpt(result.output, demand.target_format)
-            except Exception:  # l'aperçu est un bonus, le fichier est déjà là
-                log.exception("Aperçu impossible")
-                title, text = "", ""
             storage.add_history(
                 {
                     "name": result.output.name,
@@ -314,7 +309,7 @@ def create_app(
                 "name": result.output.name,
                 "path": str(result.output),
                 "duration": round(result.duration, 1),
-                "preview": {"title": title, "body": text},
+                "preview": {"title": result.preview[0], "body": result.preview[1]},
                 "report": result.report,
             }
             if storage.load_settings()["open_after"]:
