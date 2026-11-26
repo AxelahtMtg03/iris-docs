@@ -146,7 +146,8 @@
     S.file = file;
     S.srcChoice = 'auto';
     if (file.detected && file.detected === S.dst) S.dst = file.detected === 'en' ? 'fr' : 'en';
-    S.fmt = 'other';
+    S.fmtChosen = false;
+    S.fmt = S.trad && file.ext === 'pdf' && !file.scan ? 'same' : 'other';
     render();
     announce(file.name);
   }
@@ -206,7 +207,8 @@
   }
   function blocker(c) {
     if (!S.file || (!c.conv && !c.trad)) return null;
-    if (c.out === 'pdf' && !S.app.tools.libreoffice) return { text: t('needOffice') };
+    var onPage = c.ext === 'pdf' && c.trad && !S.file.scan;
+    if (c.out === 'pdf' && !onPage && !S.app.tools.libreoffice) return { text: t('needOffice') };
     if (c.ext === 'pdf' && S.file.scan && !S.app.tools.tesseract) return { text: t('needOcr') };
     var missing = missingPairs(c);
     if (missing.length) return { text: t('needModel', { pairs: missing.join(', ') }), languages: true };
@@ -293,9 +295,9 @@
 
     pills($('fmtPills'), [
       { key: 'other', label: t('convertTo', { fmt: label(c.ext === 'docx' ? 'pdf' : 'docx') }), on: c.conv,
-        pick: function () { idle(); S.fmt = 'other'; render(); } },
+        pick: function () { idle(); S.fmt = 'other'; S.fmtChosen = true; render(); } },
       { key: 'same', label: t('keep', { fmt: label(c.ext) }), on: !c.conv,
-        pick: function () { idle(); S.fmt = 'same'; render(); } }
+        pick: function () { idle(); S.fmt = 'same'; S.fmtChosen = true; render(); } }
     ], running);
 
     var autoLabel = file.detected ? t('auto', { lang: t('lang_' + file.detected) }) : t('autoUnknown');
@@ -326,6 +328,8 @@
     $('swap').disabled = running;
     $('tradOpts').hidden = !c.trad;
     $('notTrad').hidden = c.trad;
+    $('fmtHint').hidden = !(c.ext === 'pdf' && c.trad && !file.scan);
+    $('fmtHint').textContent = t(c.out === 'pdf' ? 'pdfKept' : 'pdfToWord');
 
     var possible = c.conv || c.trad;
     var block = S.stage === 'idle' ? blocker(c) : null;
@@ -374,8 +378,13 @@
 
   function renderFooter() {
     var c = choices(), engines = [];
-    if (S.file && c.ext === 'pdf' && (c.conv || c.trad)) engines.push(S.file.scan ? 'Tesseract OCR' : 'pdf2docx');
-    if (S.file && c.out === 'pdf' && (c.conv || c.trad)) engines.push('LibreOffice');
+    var onPage = c.ext === 'pdf' && c.trad && S.file && !S.file.scan;
+    if (S.file && c.ext === 'pdf' && (c.conv || c.trad)) {
+      if (S.file.scan) engines.push('Tesseract OCR');
+      else if (onPage) engines.push('PyMuPDF');
+      if (!S.file.scan && c.out === 'docx') engines.push('pdf2docx');
+    }
+    if (S.file && c.out === 'pdf' && !onPage && (c.conv || c.trad)) engines.push('LibreOffice');
     if (!S.file) engines.push('LibreOffice');
     if (c.trad || !S.file) engines.push('Argos Translate');
     $('engine').textContent = engines.length ? t('engine', { list: engines.join(' + ') }) : t('engineNone');
@@ -595,6 +604,8 @@
   $('reset').addEventListener('click', dropFile);
   $('sw').addEventListener('click', function () {
     idle(); S.trad = !S.trad;
+    // Traduire un PDF en le gardant en PDF conserve sa mise en page : c'est le choix proposé.
+    if (S.file && S.file.ext === 'pdf' && !S.file.scan && !S.fmtChosen) S.fmt = S.trad ? 'same' : 'other';
     if (S.dst === sourceLang()) S.dst = LANGS.filter(function (l) { return l !== sourceLang(); })[0];
     render();
   });

@@ -162,12 +162,19 @@ def test_scanned_pdf_is_read_and_translated(offline, scanned_pdf, tmp_path):
     assert "w_ocr" in [w["code"] for w in result.report.warnings]
 
 
-@needs_office
 @needs_models
-def test_pdf_to_translated_pdf(offline, sample_pdf, tmp_path):
-    result = pipeline.run(request(sample_pdf, "pdf", tmp_path, translate=True, target_lang="es"))
-    assert "empresa" in convert.pdf_info(result.output).text.lower()
-    assert "w_pdf_roundtrip" in [w["code"] for w in result.report.warnings]
+@pytest.mark.parametrize("target", ["pdf", "docx"])
+def test_translated_pdf_needs_no_libreoffice(offline, sample_pdf, tmp_path, monkeypatch, target):
+    monkeypatch.setenv("IRIS_SOFFICE", "")
+    result = pipeline.run(request(sample_pdf, target, tmp_path, translate=True, target_lang="es"))
+    if target == "pdf":
+        text, code = convert.pdf_info(result.output).text, "w_pdf_inplace"
+    else:
+        text = " ".join(p.text for p in Document(result.output).paragraphs)
+        code = "w_pdf_to_word"
+    assert "empresa" in text.lower() and "entreprise" not in text.lower()
+    assert code in [w["code"] for w in result.report.warnings]
+    assert not leftovers()
 
 
 @needs_office

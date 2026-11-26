@@ -11,7 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from . import convert, docx_inplace, models, translate
+from . import convert, docx_inplace, models, pdf_inplace, translate
 from .errors import Cancelled, IrisError
 from .report import Report
 from .storage import session_tmp
@@ -90,8 +90,6 @@ def run(
         raise IrisError("nothing_to_do")
 
     # Tout ce qui peut manquer est vérifié avant de commencer à travailler.
-    if target == "pdf" and not convert.find_soffice():
-        raise IrisError("no_libreoffice")
     if request.translate:
         models.require(request.source_lang, request.target_lang)
     info, scan = None, False
@@ -104,14 +102,24 @@ def run(
             convert.check_ocr(request.source_lang if request.translate else None)
         elif not info.text.strip():
             raise IrisError("no_text")
+    # Un PDF avec du texte se traduit sur la page elle-même : la mise en page est conservée.
+    on_page = kind == "pdf" and request.translate and not scan
+    export = target == "pdf" and not on_page
+    if export and not convert.find_soffice():
+        raise IrisError("no_libreoffice")
 
     steps = []
-    if kind == "pdf":
-        steps.append("ocr" if scan else "pdf_to_docx")
-    if request.translate:
+    if on_page:
         steps.append("translate")
-    if target == "pdf":
-        steps.append("docx_to_pdf")
+        if target == "docx":
+            steps.append("pdf_to_docx")
+    else:
+        if kind == "pdf":
+            steps.append("ocr" if scan else "pdf_to_docx")
+        if request.translate:
+            steps.append("translate")
+        if export:
+            steps.append("docx_to_pdf")
     steps.append("save")
     total = sum(_WEIGHTS[s] for s in steps)
 
@@ -135,7 +143,27 @@ def run(
         shutil.copyfile(request.source, working)
         check()
 
-        if kind == "pdf":
+        preview = None
+        if on_page:
+            assert info
+            engine = translate.translator(request.source_lang, request.target_lang)
+            translated = tmp / "translated.pdf"
+            found = pdf_inplace.translate_pdf(
+                working, translated, engine, cancel, stage("translate")
+            )
+            if found.failed and not found.translated:
+                raise IrisError("internal", "\n".join(found.errors))
+            report.add_pdf_translation(found, keeps_pdf=target == "pdf")
+            if info.scanned:
+                report.warn("w_pages_without_text", count=info.scanned)
+            preview = (found.title, found.excerpt)
+            working = translated
+            if target == "docx":
+                document = tmp / "translated.docx"
+                convert.pdf_to_docx(working, document, cancel, stage("pdf_to_docx"))
+                report.warn("w_pdf_to_word")
+                working = document
+        elif kind == "pdf":
             assert info
             document = tmp / "rebuilt.docx"
             if scan:
@@ -155,7 +183,7 @@ def run(
             working = document
         check()
 
-        if request.translate:
+        if request.translate and not on_page:
             engine = translate.translator(request.source_lang, request.target_lang)
             translated = tmp / "translated.docx"
             stats = docx_inplace.translate_docx(
@@ -164,15 +192,15 @@ def run(
             if stats.failed and not stats.translated:
                 raise IrisError("internal", "\n".join(stats.errors))
             report.add_translation(stats)
-            if len(models.route(request.source_lang, request.target_lang)) > 1:
-                report.warn("w_pivot")
             if kind == "pdf" and target == "pdf":
                 report.warn("w_pdf_roundtrip")
             working = translated
+        if request.translate and len(models.route(request.source_lang, request.target_lang)) > 1:
+            report.warn("w_pivot")
         check()
-        preview = _preview(working)
+        preview = preview or _preview(working)
 
-        if target == "pdf":
+        if export:
             stage("docx_to_pdf")
             exported = tmp / "export.pdf"
             convert.docx_to_pdf(working, exported, cancel)

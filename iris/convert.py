@@ -333,6 +333,9 @@ def _repair_links(path: Path) -> None:
 def _pdf2docx(source: str, target: str) -> None:
     from pdf2docx import Converter
 
+    from .pdf_text import repair_pdf2docx
+
+    repair_pdf2docx()
     converter = Converter(source)
     try:
         converter.convert(target)

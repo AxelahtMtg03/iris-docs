@@ -214,7 +214,7 @@ def _snap(text: str, position: int, low: int, high: int) -> int:
     return min(edges, key=lambda i: abs(i - position))
 
 
-def _locate(haystack: str, candidate: str, floor: int, expected: float) -> tuple[int, int] | None:
+def locate(haystack: str, candidate: str, floor: int, expected: float) -> tuple[int, int] | None:
     """Position de `candidate` dans la phrase : à l'identique, sinon par ses mots principaux
     (« improving the website » retrouve « improve the team's website »)."""
     pattern = re.escape(candidate)
@@ -259,9 +259,18 @@ def distribute(translated: str, originals: list[str], translate: Callable[[str],
     cuts: list[int | None] = [0] + [None] * (count - 1) + [len(translated)]
     haystack = translated.lower()
     floor = 0
+    first = 0
+    # Intertitre en début de phrase (« Flotte mondiale. Le dernier… ») : il s'arrête à la
+    # même ponctuation dans la traduction.
+    head = originals[0].rstrip()
+    if dominant != 0 and head[-1:] in (".", ":"):
+        match = re.search(re.escape(head[-1]) + r"(?=\s)", translated)
+        if match and match.end() <= 2 * len(head) + 8:
+            cuts[1] = floor = match.end()
+            first = 1
     for index, original in enumerate(originals):
         core = original.strip("  .,;:!?()[]«»\"'")
-        if index == dominant or len(core) < 2:
+        if index < first or index == dominant or len(core) < 2:
             continue
         expected = len(translated) * sum(map(len, originals[:index])) / total
         candidates = [core]
@@ -270,7 +279,7 @@ def distribute(translated: str, originals: list[str], translate: Callable[[str],
         for candidate in candidates:
             if not candidate:
                 continue
-            found = _locate(haystack, candidate.lower(), floor, expected)
+            found = locate(haystack, candidate.lower(), floor, expected)
             if found:
                 start, end = found
                 # Aux extrémités, la ponctuation voisine reste avec le morceau.

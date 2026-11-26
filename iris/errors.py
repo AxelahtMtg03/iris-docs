@@ -194,6 +194,29 @@ MESSAGES: dict[str, dict[str, str]] = {
         "es": "Un PDF no es un formato editable: el diseño se ha reconstruido y puede diferir "
         "del original.",
     },
+    "w_pdf_inplace": {
+        "fr": "Le texte traduit a été écrit à la place de l'original : images, tableaux et "
+        "pages ne bougent pas. La police utilisée est proche de l'originale.",
+        "en": "The translated text was written in place of the original: images, tables and pages "
+        "do not move. The font used is close to the original one.",
+        "es": "El texto traducido se ha escrito en el lugar del original: imágenes, tablas y "
+        "páginas no se mueven. La fuente utilizada se parece a la original.",
+    },
+    "w_fitted": {
+        "fr": "{count} passage(s) plus longs que l'original ont été réduits pour tenir à leur "
+        "place.",
+        "en": "{count} passage(s) longer than the original were shrunk to fit their place.",
+        "es": "{count} fragmento(s) más largos que el original se han reducido para caber en su "
+        "sitio.",
+    },
+    "w_pdf_to_word": {
+        "fr": "La version Word est reconstruite à partir du PDF traduit : sa mise en page est "
+        "approchante. Pour la conserver exactement, choisis « Garder PDF ».",
+        "en": "The Word version is rebuilt from the translated PDF: its layout is approximate. To "
+        "keep it exactly, choose “Keep PDF”.",
+        "es": "La versión Word se reconstruye a partir del PDF traducido: su diseño es "
+        "aproximado. Para conservarlo exactamente, elige «Mantener PDF».",
+    },
     "w_pdf_roundtrip": {
         "fr": "Pour traduire ce PDF, il est passé par un document Word intermédiaire avant d'être "
         "recréé en PDF.",

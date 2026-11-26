@@ -116,6 +116,13 @@ def test_distribute(translated, originals, expected):
     assert pieces == expected
 
 
+def test_run_in_heading_stops_at_its_punctuation():
+    originals = ["Accidents maritimes. ", "Le premier jeu de données recense les accidents en mer."]
+    translated = "Marine accidents. The first data set lists accidents at sea."
+    pieces = docx_inplace.distribute(translated, originals, lambda t: "Maritime accidents")
+    assert pieces[0] == "Marine accidents."
+
+
 def test_distribute_never_loses_text():
     originals = ["abc ", "def ", "ghi ", "jkl"]
     for translated in ("x", "", "one two", "a much longer sentence than the original one"):

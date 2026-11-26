@@ -7,6 +7,7 @@ from typing import Any
 
 from .docx_inplace import Stats
 from .errors import message
+from .pdf_inplace import Stats as PdfStats
 
 LONGER_THRESHOLD = 1.10
 
@@ -34,6 +35,15 @@ class Report:
             self.warn("w_longer", percent=round((stats.chars_out / stats.chars_in - 1) * 100))
         if stats.mixed:
             self.warn("w_mixed_style", count=stats.mixed)
+
+    def add_pdf_translation(self, stats: PdfStats, keeps_pdf: bool) -> None:
+        self.counts = {"paragraphs": stats.translated, "images": stats.images}
+        if stats.failed:
+            self.warn("w_untranslated", count=stats.failed)
+        if keeps_pdf:
+            self.warn("w_pdf_inplace")
+        if stats.fitted:
+            self.warn("w_fitted", count=stats.fitted)
 
     def localized(self, lang: str = "fr") -> dict[str, Any]:
         return {
