@@ -59,6 +59,11 @@ MESSAGES: dict[str, dict[str, str]] = {
         "en": "Source and target languages must be different.",
         "es": "Los idiomas de origen y destino deben ser distintos.",
     },
+    "busy": {
+        "fr": "Une tâche est en cours : attends qu'elle soit terminée.",
+        "en": "A task is running: wait until it finishes.",
+        "es": "Hay una tarea en curso: espera a que termine.",
+    },
     "bad_request": {
         "fr": "La demande n'est pas valide.",
         "en": "Invalid request.",

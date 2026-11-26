@@ -173,18 +173,20 @@ def create_app(
 
     # ------------------------------------------------------------ fichiers
 
+    def own_folder(source: Source) -> Path:
+        return storage.default_out_dir() if source.uploaded else source.path.parent
+
     def describe(source: Source) -> dict[str, Any]:
         title, body, sample = _excerpt(source.path, source.ext)
         info = convert.pdf_info(source.path) if source.ext == "pdf" else None
-        chosen = storage.load_settings()["out_dir"]
-        folder = chosen or (storage.default_out_dir() if source.uploaded else source.path.parent)
         return {
             "id": source.id,
             "name": source.name,
             "ext": source.ext,
             "size": source.path.stat().st_size,
-            "out_dir": str(folder),
-            "source_folder_unknown": source.uploaded and not chosen,
+            # dossier de sortie quand les réglages n'en imposent pas
+            "source_dir": str(own_folder(source)),
+            "uploaded": source.uploaded,
             "detected": translate.detect(sample),
             "preview": {"title": title, "body": body},
             "scan": bool(info and info.is_scan),
@@ -197,7 +199,13 @@ def create_app(
             raise IrisError("too_big", max=limit)
         ext = convert.sniff(path)
         source = Source(uuid.uuid4().hex, path, name, ext, uploaded)
-        described = describe(source)
+        try:
+            described = describe(source)
+        except IrisError:
+            raise
+        except Exception as exc:  # fichier à la structure illisible
+            kind = "PDF" if ext == "pdf" else "Word"
+            raise IrisError("bad_content", f"{type(exc).__name__}: {exc}", kind=kind) from exc
         sources[source.id] = source
         return described
 
@@ -271,9 +279,7 @@ def create_app(
         if not source:
             raise IrisError("not_found", "fichier non déposé")
         options = storage.load_settings()
-        folder = options["out_dir"] or (
-            str(storage.default_out_dir()) if source.uploaded else str(source.path.parent)
-        )
+        folder = options["out_dir"] or own_folder(source)
         demand = pipeline.Request(
             source=source.path,
             name=source.name,
@@ -392,7 +398,7 @@ def create_app(
     @app.delete("/api/models/<pair>")
     def remove_model(pair: str):  # type: ignore[no-untyped-def]
         if manager.active("document") or manager.active("model"):
-            raise IrisError("bad_request", "une tâche est en cours")
+            raise IrisError("busy")
         models.uninstall(pair)
         return jsonify(models.overview())
 

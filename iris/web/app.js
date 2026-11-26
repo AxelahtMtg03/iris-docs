@@ -65,8 +65,8 @@
   function showError(error) {
     if (!error || error.silent) return;
     S.notice = { message: error.message || String(error), detail: error.detail || '' };
-    if (S.view !== 'document') window.alert(S.notice.message);
     render();
+    $('notice').scrollIntoView({ block: 'nearest' });
   }
   function announce(text) { $('announce').textContent = text; }
 
@@ -129,10 +129,6 @@
     render();
     return api('PUT', '/api/settings', changes).then(function (settings) {
       S.app.settings = settings;
-      if (S.file && ('out_dir' in changes)) {
-        S.file.out_dir = settings.out_dir || (S.file.uploaded_dir || S.file.out_dir);
-        S.file.source_folder_unknown = !settings.out_dir && S.file.uploaded;
-      }
       render();
       if (changes.lang && S.view === 'history') loadHistory();
     }).catch(showError);
@@ -144,11 +140,9 @@
     S.stage = 'idle'; S.job = null; S.result = null; S.notice = null;
   }
   function busy() { return S.stage === 'running'; }
-  function useFile(file, uploaded) {
+  function useFile(file) {
     if (S.file) api('DELETE', '/api/files/' + S.file.id).catch(function () {});
     idle();
-    file.uploaded = uploaded;
-    file.uploaded_dir = S.app.default_out_dir;
     S.file = file;
     S.srcChoice = 'auto';
     if (file.detected && file.detected === S.dst) S.dst = file.detected === 'en' ? 'fr' : 'en';
@@ -173,7 +167,7 @@
       ? Promise.reject({ message: t('maxSize') + ' : ' + limit })
       : api('POST', '/api/files', data);
     request.then(function (described) {
-      S.reading = false; useFile(described, true);
+      S.reading = false; useFile(described);
     }).catch(function (error) { S.reading = false; showError(error); });
   }
   function pick(kind) {
@@ -182,10 +176,10 @@
     api('POST', '/api/pick', { kind: kind }).then(function (answer) {
       S.dialog = false;
       if (answer.unavailable) {
-        $('fileInput').setAttribute('accept', '.' + kind);
+        $('fileInput').setAttribute('accept', kind === 'any' ? '.docx,.pdf' : '.' + kind);
         $('fileInput').click();
         render();
-      } else if (answer.file) useFile(answer.file, false);
+      } else if (answer.file) useFile(answer.file);
       else render();
     }).catch(function (error) { S.dialog = false; showError(error); });
   }
@@ -243,7 +237,6 @@
         } else if (job.status === 'error') {
           S.stage = 'idle';
           showError(job.error);
-          $('notice').scrollIntoView({ block: 'nearest' });
         } else if (job.status === 'cancelled') {
           S.stage = 'idle'; S.job = null;
           render();
@@ -276,12 +269,6 @@
     var file = S.file, c = choices(), running = busy(), done = S.stage === 'done';
     var label = function (f) { return f === 'pdf' ? 'PDF' : 'Word (.docx)'; };
 
-    $('notice').hidden = !S.notice;
-    if (S.notice) {
-      $('noticeText').textContent = S.notice.message;
-      $('noticeDetails').hidden = !S.notice.detail;
-      $('noticeDetail').textContent = S.notice.detail;
-    }
     $('noFile').hidden = !!file;
     $('hasFile').hidden = !file;
     $('noFile').classList.toggle('busy', S.reading || S.dialog);
@@ -362,7 +349,8 @@
     if (running) renderProgress();
 
     $('outHint').textContent = done ? t('savedIn', { folder: S.result.path })
-      : waiting && possible ? t('willSave', { folder: file.out_dir }) + (file.source_folder_unknown ? t('unknownFolder') : '')
+      : waiting && possible ? t('willSave', { folder: S.app.settings.out_dir || file.source_dir }) +
+        (file.uploaded && !S.app.settings.out_dir ? t('unknownFolder') : '')
       : '';
 
     $('report').hidden = !done;
@@ -545,6 +533,12 @@
       else b.removeAttribute('aria-current');
     });
     ['document', 'history', 'languages', 'settings'].forEach(function (v) { $('view-' + v).hidden = v !== S.view; });
+    $('notice').hidden = !S.notice;
+    if (S.notice) {
+      $('noticeText').textContent = S.notice.message;
+      $('noticeDetails').hidden = !S.notice.detail;
+      $('noticeDetail').textContent = S.notice.detail;
+    }
     renderDocument();
     renderFooter();
     if (S.view === 'history') renderHistory();
@@ -553,6 +547,7 @@
   }
 
   function show(view) {
+    if (view !== S.view) S.notice = null;
     S.view = view;
     render();
     if (view === 'history') loadHistory();

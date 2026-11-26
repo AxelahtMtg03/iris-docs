@@ -141,6 +141,7 @@ def uninstall(pair: str) -> None:
         raise IrisError("bad_request", f"paire inconnue : {pair}")
     argos = _argos()
     available = installed()
+    _reset()  # libère les modèles chargés avant de les supprimer
     for direction in PAIRS[pair]:
         if direction in available:
             argos.package.uninstall(available[direction])
