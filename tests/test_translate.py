@@ -35,7 +35,10 @@ def test_split_sentences():
     ],
 )
 def test_protected_content_survives(engine):
-    text = "Écris à a.b@example.org, visite https://example.org/x?y=1 avant le 12 : voir mon_fichier.txt"
+    text = (
+        "Écris à a.b@example.org, visite https://example.org/x?y=1 "
+        "avant le 12 : voir mon_fichier.txt"
+    )
     result = translate.protect(text, [], engine)
     for kept in ("a.b@example.org", "https://example.org/x?y=1", "12", "mon_fichier.txt"):
         assert kept in result

@@ -44,7 +44,9 @@ def route(source: str, target: str) -> list[tuple[str, str]]:
 
 def require(source: str, target: str) -> None:
     available = installed()
-    missing = [f"{a.upper()} → {b.upper()}" for a, b in route(source, target) if (a, b) not in available]
+    missing = [
+        f"{a.upper()} → {b.upper()}" for a, b in route(source, target) if (a, b) not in available
+    ]
     if missing:
         raise IrisError("no_model", pairs=", ".join(missing))
 

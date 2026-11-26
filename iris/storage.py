@@ -46,7 +46,7 @@ def data_dir() -> Path:
 
 
 def default_out_dir() -> Path:
-    """Utilisé quand le dossier du fichier source est inconnu (fichier glissé dans le navigateur)."""
+    """Utilisé quand le dossier du fichier source est inconnu (fichier glissé dans la page)."""
     return Path.home() / "Downloads" / "Iris"
 
 

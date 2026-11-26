@@ -42,9 +42,8 @@ def test_only_text_changes(sample_docx, tmp_path):
     before, after = xml_parts(sample_docx), xml_parts(out)
     assert set(before) == set(after)
     for name in before:
-        if name.startswith("word/") and name.endswith(".xml"):
-            if b"<w:t" in before[name]:
-                assert skeleton(before[name]) == skeleton(after[name]), name
+        if name.startswith("word/") and name.endswith(".xml") and b"<w:t" in before[name]:
+            assert skeleton(before[name]) == skeleton(after[name]), name
         if name.startswith("word/media/"):
             assert before[name] == after[name]
     assert stats.failed == 0
@@ -111,7 +110,9 @@ def test_styles_follow_their_words(tmp_path):
     ],
 )
 def test_distribute(translated, originals, expected):
-    pieces = docx_inplace.distribute(translated, originals, lambda t: "improving the website" if "site" in t else t)
+    pieces = docx_inplace.distribute(
+        translated, originals, lambda t: "improving the website" if "site" in t else t
+    )
     assert pieces == expected
 
 

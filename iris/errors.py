@@ -127,7 +127,8 @@ MESSAGES: dict[str, dict[str, str]] = {
         "es": "La descarga del modelo ha fallado. Comprueba tu conexión e inténtalo de nuevo.",
     },
     "convert_failed": {
-        "fr": "La conversion a échoué. Le document utilise peut-être un élément non pris en charge.",
+        "fr": "La conversion a échoué. Le document utilise peut-être un élément non pris en "
+        "charge.",
         "en": "The conversion failed. The document may use an unsupported feature.",
         "es": "La conversión ha fallado. Puede que el documento use un elemento no compatible.",
     },

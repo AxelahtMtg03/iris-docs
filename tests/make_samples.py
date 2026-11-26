@@ -22,10 +22,22 @@ TEXT = {
         "title": "Rapport de stage",
         "intro": "Introduction",
         "p1": "Ce rapport présente les résultats du stage effectué au sein de l'entreprise.",
-        "bold": ("La mission principale consistait à ", "améliorer le site internet", " de l'équipe."),
+        "bold": (
+            "La mission principale consistait à ",
+            "améliorer le site internet",
+            " de l'équipe.",
+        ),
         "link": ("Plus d'informations sur ", "notre site officiel", " ou par courriel à "),
-        "list": ["Analyser les besoins des clients", "Développer une nouvelle page", "Former les collègues"],
-        "table": [["Tâche", "Durée"], ["Réunion d'équipe", "Deux semaines"], ["Rédaction du rapport", "Une semaine"]],
+        "list": [
+            "Analyser les besoins des clients",
+            "Développer une nouvelle page",
+            "Former les collègues",
+        ],
+        "table": [
+            ["Tâche", "Durée"],
+            ["Réunion d'équipe", "Deux semaines"],
+            ["Rédaction du rapport", "Une semaine"],
+        ],
         "nested": "Tableau imbriqué avec une remarque",
         "header": "Université de Lyon — document confidentiel",
         "footer": "Page ",
@@ -36,11 +48,13 @@ TEXT = {
 }
 
 NOTES_XML = (
-    '<w:footnotes {ns}><w:footnote w:type="separator" w:id="-1"><w:p><w:r><w:separator/></w:r></w:p>'
-    '</w:footnote><w:footnote w:type="continuationSeparator" w:id="0"><w:p><w:r>'
-    "<w:continuationSeparator/></w:r></w:p></w:footnote>"
-    '<w:footnote w:id="1"><w:p><w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr><w:footnoteRef/>'
-    '</w:r><w:r><w:t xml:space="preserve"> {text}</w:t></w:r></w:p></w:footnote></w:footnotes>'
+    '<w:footnotes {ns}><w:footnote w:type="separator" w:id="-1">'
+    "<w:p><w:r><w:separator/></w:r></w:p></w:footnote>"
+    '<w:footnote w:type="continuationSeparator" w:id="0">'
+    "<w:p><w:r><w:continuationSeparator/></w:r></w:p></w:footnote>"
+    '<w:footnote w:id="1"><w:p><w:r><w:rPr><w:vertAlign w:val="superscript"/></w:rPr>'
+    '<w:footnoteRef/></w:r><w:r><w:t xml:space="preserve"> {text}</w:t></w:r></w:p>'
+    "</w:footnote></w:footnotes>"
 )
 
 

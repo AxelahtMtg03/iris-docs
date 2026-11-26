@@ -244,9 +244,7 @@ def _locate(haystack: str, candidate: str, floor: int, expected: float) -> tuple
     return best[0][0], best[-1][1]
 
 
-def distribute(
-    translated: str, originals: list[str], translate: Callable[[str], str]
-) -> list[str]:
+def distribute(translated: str, originals: list[str], translate: Callable[[str], str]) -> list[str]:
     """Découpe la traduction en autant de morceaux qu'il y a de styles.
 
     Le style le plus long sert de fond ; pour les autres (un mot en gras, un lien…), on

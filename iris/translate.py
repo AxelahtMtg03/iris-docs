@@ -76,7 +76,9 @@ def _engine(source: str, target: str) -> tuple[Any, Any]:
 
             package = models.installed()[(source, target)]
             engine = ctranslate2.Translator(
-                str(package.package_path / "model"), device="cpu", compute_type="default"  # "auto" abîme es->en
+                str(package.package_path / "model"),
+                device="cpu",
+                compute_type="default",  # "auto" abîme es->en
             )
             _engines[(source, target)] = (package, engine)
         return _engines[(source, target)]
@@ -214,8 +216,8 @@ def translator(source: str, target: str) -> Callable[[str, list[str]], str]:
 # ---------------------------------------------------------------- détection
 
 _COMMON = {
-    "fr": "le la les un une des du de et est que qui dans pour pas sur avec ce cette sont au aux ne "
-    "se il elle nous vous ils mais ou où été être plus ses leur par je tu mon ton sa son",
+    "fr": "le la les un une des du de et est que qui dans pour pas sur avec ce cette sont au "
+    "aux ne se il elle nous vous ils mais ou où été être plus ses leur par je tu mon ton sa son",
     "en": "the a an of and is that which in for not on with this are to be was were it he she we "
     "you they but or been more from by as at has have will their our your its",
     "es": "el la los las un una unos y es que en para no sobre con este esta son al del se lo su "
