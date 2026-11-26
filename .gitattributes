@@ -1,0 +1,6 @@
+* text=auto eol=lf
+design-reference/** -text
+*.woff2 binary
+*.docx binary
+*.pdf binary
+*.png binary
