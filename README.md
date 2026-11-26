@@ -15,7 +15,7 @@ Internet ne sert qu'une fois, pour installer le projet et télécharger les mod�
 Il faut **Python 3.10 ou plus récent** et environ 2 Go d'espace disque.
 
 ```bash
-git clone https://github.com/<mon-pseudo>/iris-docs
+git clone https://github.com/AxelahtMtg03/iris-docs
 cd iris-docs
 python -m venv .venv
 ```
@@ -48,7 +48,8 @@ python -m iris install
 
 Un raccourci « Iris » apparaît dans le menu Démarrer et sur le bureau (Windows), ou dans le menu
 des applications (Linux). Il s'appuie sur ce dossier : ne le déplace pas, ou relance la commande
-après l'avoir déplacé. `python -m iris uninstall` retire les raccourcis. Sur macOS, utilise
+après l'avoir déplacé. Sous Windows, la fenêtre a sa propre barre de titre et son icône dans la
+barre des tâches, où tu peux l'épingler. `python -m iris uninstall` retire les raccourcis. Sur macOS, utilise
 `python run.py`.
 
 ### Deux logiciels à ajouter

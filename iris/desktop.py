@@ -8,9 +8,12 @@ import subprocess
 import sys
 from pathlib import Path
 
+from . import winframe
+
 ROOT = Path(__file__).resolve().parent.parent
 ICONS = ROOT / "iris" / "web" / "icons"
 DESCRIPTION = "Convertit et traduit des documents, en local"
+SHORTCUT_SOURCE = Path(__file__).with_name("shortcut.cs")
 
 # Les chemins passent par l'environnement : aucun problème de guillemets ou d'accents.
 _WINDOWS = """
@@ -27,6 +30,8 @@ foreach ($name in 'Programs', 'Desktop') {
     $link.IconLocation = $env:IRIS_ICON
     $link.Description = $env:IRIS_DESCRIPTION
     $link.Save()
+    if (-not ('IrisShortcut' -as [type])) { Add-Type -TypeDefinition $env:IRIS_APP_ID_TYPE }
+    [IrisShortcut]::SetAppId($path, $env:IRIS_APP_ID)
     $path
   } elseif (Test-Path -LiteralPath $path) {
     Remove-Item -LiteralPath $path
@@ -46,6 +51,8 @@ def _windows(action: str) -> list[str]:
         "IRIS_ROOT": str(ROOT),
         "IRIS_ICON": str(ICONS / "iris.ico"),
         "IRIS_DESCRIPTION": DESCRIPTION,
+        "IRIS_APP_ID": winframe.APP_ID,
+        "IRIS_APP_ID_TYPE": SHORTCUT_SOURCE.read_text(encoding="utf-8"),
     }
     result = subprocess.run(
         ["powershell", "-NoProfile", "-NonInteractive", "-Command", _WINDOWS],

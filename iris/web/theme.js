@@ -7,10 +7,13 @@
   }
   document.documentElement.setAttribute('data-theme', saved);
   // Dans la fenêtre de l'application, la page remplit tout, sans le décor du navigateur.
-  var desktop = /[#&]d=1/.test(location.hash);
-  try {
-    if (desktop) sessionStorage.setItem('iris-desktop', '1');
-    else desktop = sessionStorage.getItem('iris-desktop') === '1';
-  } catch (e) { /* stockage indisponible */ }
-  if (desktop) document.documentElement.classList.add('desktop');
+  // « winframe » : fenêtre sans barre de titre, la page dessine les boutons.
+  [['d', 'desktop'], ['w', 'winframe']].forEach(function (flag) {
+    var on = new RegExp('[#&]' + flag[0] + '=1').test(location.hash);
+    try {
+      if (on) sessionStorage.setItem('iris-' + flag[1], '1');
+      else on = sessionStorage.getItem('iris-' + flag[1]) === '1';
+    } catch (e) { /* stockage indisponible */ }
+    if (on) document.documentElement.classList.add(flag[1]);
+  });
 })();

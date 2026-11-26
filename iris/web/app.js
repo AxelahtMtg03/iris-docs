@@ -119,8 +119,34 @@
     } catch (e) { /* stockage indisponible */ }
     if (wanted === 'system') wanted = lightQuery.matches ? 'light' : 'dark';
     root.setAttribute('data-theme', wanted);
+    paintWindow();
   }
   lightQuery.addEventListener('change', function () { if (S.app) applyTheme(); });
+
+  /* ---------- Fenêtre de bureau (Windows) ---------- */
+  // Absent dans un navigateur, et tant que la fenêtre n'a pas branché ses fonctions.
+  function desktopWindow() {
+    var bridge = window.pywebview && window.pywebview.api;
+    return bridge && bridge.window_close ? bridge : null;
+  }
+  function paintWindow() {
+    var bridge = desktopWindow();
+    if (!bridge) return;
+    var color = getComputedStyle(root).getPropertyValue('--chrome').trim();
+    bridge.window_color(color, root.getAttribute('data-theme') === 'dark');
+  }
+  function syncMaximized() {
+    var bridge = desktopWindow();
+    if (bridge) bridge.window_maximized().then(function (on) { root.classList.toggle('maximized', on); });
+  }
+  [['winMin', 'window_minimize'], ['winMax', 'window_maximize'], ['winClose', 'window_close']].forEach(function (pair) {
+    $(pair[0]).addEventListener('click', function () {
+      var bridge = desktopWindow();
+      if (bridge) bridge[pair[1]]();
+    });
+  });
+  window.addEventListener('pywebviewready', function () { paintWindow(); syncMaximized(); });
+  window.addEventListener('resize', syncMaximized);
 
   function saveSettings(changes) {
     Object.assign(S.app.settings, changes);

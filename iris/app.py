@@ -12,7 +12,7 @@ from typing import Any
 
 from werkzeug.serving import make_server
 
-from . import desktop, storage, system
+from . import desktop, storage, system, winframe
 from .server import create_app
 
 HOST = "127.0.0.1"
@@ -73,14 +73,20 @@ def main(argv: list[str] | None = None) -> None:
     try:
         if webview is not None:
             try:
+                framed = sys.platform == "win32"  # la page remplace la barre de titre
+                if framed:
+                    winframe.identify()
                 window = webview.create_window(
                     "Iris",
-                    url + "&d=1",  # présentation « application » : sans décor autour
+                    # présentation « application » : sans décor autour
+                    url + "&d=1" + ("&w=1" if framed else ""),
                     width=1180,
                     height=880,
                     min_size=(360, 560),
                     background_color="#0E1222",
                 )
+                if framed:
+                    winframe.Frame(window)
                 picker["call"] = _window_picker(window, webview)
                 webview.settings["ALLOW_DOWNLOADS"] = True
                 # shortcut: un fichier glissé dans la fenêtre est envoyé sans son chemin ;

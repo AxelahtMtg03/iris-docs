@@ -13,6 +13,7 @@
   --sky: #7FB5F0;
   --royal: #3B82F6;
   --amber-grad: linear-gradient(135deg, var(--amber), var(--amber-light));
+  --close: #C42B1C; --on-close: #FFFFFF;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -21,7 +22,7 @@
   --shadow: rgba(0,0,0,0.5); --winBg: rgba(14,18,34,0.78); --btnBg: #F5F5F7; --btnFg: #05060B;
   --gA: #FFFFFF; --gB: #8A90A6; --acc: #E8A33D; --blue: #7FB5F0; --g1: #E8A33D; --g2: #7FB5F0;
   --blobA: 0.5; --blobB: 0.35; --swapBg: rgba(20,24,44,0.9);
-  --acc-text: #E8A33D; --danger: #FF8A80; --ok: #7BD88F;
+  --acc-text: #E8A33D; --danger: #FF8A80; --ok: #7BD88F; --chrome: #0B0F1D;
 }
 :root[data-theme="light"] {
   color-scheme: light;
@@ -31,7 +32,7 @@
   --btnFg: #FFFFFF; --gA: #0B1020; --gB: #5A6580; --acc: #B86E00; --blue: #1D5FD8;
   --g1: #D98A0B; --g2: #2563EB; --blobA: 0.22; --blobB: 0.25; --swapBg: rgba(255,255,255,0.95);
   /* ambre assombri pour le petit texte : contraste AA sur fond clair */
-  --acc-text: #8A5200; --danger: #B3261E; --ok: #1B6B31;
+  --acc-text: #8A5200; --danger: #B3261E; --ok: #1B6B31; --chrome: #FFFFFF;
 }
 
 /* ---------- Base ---------- */
@@ -302,6 +303,28 @@ html.desktop .side { overflow-y: auto; }
 html.desktop .main { overflow-y: auto; }
 html.desktop .view > * , html.desktop #notice { width: 100%; max-width: 980px; margin-left: auto; margin-right: auto; }
 html.desktop .view .view > * { max-width: none; }
+
+/* ---------- Windows : la barre de titre est dessinée ici ---------- */
+.titlebar .logo, .winctl { display: none; }
+/* 40px ici, plus la bande de 4px que la fenêtre garde au-dessus pour la redimensionner */
+html.winframe .titlebar {
+  position: static; flex: none; height: 40px; gap: 10px; padding: 0 0 0 16px;
+  background: var(--chrome); app-region: drag; user-select: none;
+}
+html.winframe .titlebar .logo { display: block; }
+html.winframe .titlebar .name { display: block; text-align: left; font-weight: 700; color: var(--fg); }
+html.winframe .theme-btn { width: 36px; height: 36px; margin: 0; app-region: no-drag; }
+html.winframe .winctl { display: flex; align-self: stretch; app-region: no-drag; }
+.winctl button {
+  width: 46px; padding: 0; border: 0; background: transparent; color: var(--fg);
+  display: inline-flex; align-items: center; justify-content: center; cursor: default;
+}
+.winctl button:hover { background: rgba(var(--wr), 0.1); }
+.winctl button:focus-visible { outline-offset: -3px; }
+.winctl #winClose:hover { background: var(--close); color: var(--on-close); }
+.winctl .i-restore, html.maximized .winctl .i-max { display: none; }
+html.maximized .winctl .i-restore { display: inline; }
+html.winframe .brand { display: none; }
 
 /* ---------- Petits et grands écrans ---------- */
 @media (max-width: 859px) {

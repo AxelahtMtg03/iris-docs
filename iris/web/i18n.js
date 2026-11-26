@@ -2,7 +2,7 @@
 window.IRIS_I18N = {
   fr: {
     docTitle: 'Iris — Application',
-    back: '← Retour à la vitrine', themeToggle: 'Changer de thème', navLabel: 'Sections',
+    back: '← Retour à la vitrine', themeToggle: 'Changer de thème', winMinimize: 'Réduire', winMaximize: 'Agrandir ou restaurer', winClose: 'Fermer', navLabel: 'Sections',
     navDocument: 'Document', navHistory: 'Historique', navLanguages: 'Langues installées', navSettings: 'Réglages',
     titleDocument: 'Convertir un document', titleHistory: 'Historique', titleLanguages: 'Langues installées', titleSettings: 'Réglages',
     technical: 'Détail technique',
@@ -58,7 +58,7 @@ window.IRIS_I18N = {
   },
   en: {
     docTitle: 'Iris — App',
-    back: '← Back to the website', themeToggle: 'Switch theme', navLabel: 'Sections',
+    back: '← Back to the website', themeToggle: 'Switch theme', winMinimize: 'Minimize', winMaximize: 'Maximize or restore', winClose: 'Close', navLabel: 'Sections',
     navDocument: 'Document', navHistory: 'History', navLanguages: 'Installed languages', navSettings: 'Settings',
     titleDocument: 'Convert a document', titleHistory: 'History', titleLanguages: 'Installed languages', titleSettings: 'Settings',
     technical: 'Technical details',
@@ -114,7 +114,7 @@ window.IRIS_I18N = {
   },
   es: {
     docTitle: 'Iris — Aplicación',
-    back: '← Volver a la web', themeToggle: 'Cambiar de tema', navLabel: 'Secciones',
+    back: '← Volver a la web', themeToggle: 'Cambiar de tema', winMinimize: 'Minimizar', winMaximize: 'Maximizar o restaurar', winClose: 'Cerrar', navLabel: 'Secciones',
     navDocument: 'Documento', navHistory: 'Historial', navLanguages: 'Idiomas instalados', navSettings: 'Ajustes',
     titleDocument: 'Convertir un documento', titleHistory: 'Historial', titleLanguages: 'Idiomas instalados', titleSettings: 'Ajustes',
     technical: 'Detalle técnico',
