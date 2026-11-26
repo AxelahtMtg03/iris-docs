@@ -60,16 +60,12 @@
 <section class="view" id="view-document" tabindex="-1">
   <h1 class="grad" data-i18n="titleDocument">Convertir un document</h1>
 
-  <div id="noFile" class="dz">
-    <div class="dz-icon bob"><svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5"/><path d="m7 9 5-5 5 5"/><path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg></div>
-    <strong id="dzTitle" aria-live="polite">Dépose ton document ici</strong>
+  <button type="button" id="noFile" class="dz">
+    <span class="dz-icon bob"><svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5"/><path d="m7 9 5-5 5 5"/><path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg></span>
+    <strong id="dzTitle" aria-live="polite">Clique ou dépose ton document ici</strong>
     <span class="sub" data-i18n="dropSub">Word (.docx) ou PDF : tu choisis ensuite le format, et la traduction si besoin</span>
-    <div class="dz-actions">
-      <button type="button" class="btn btn-primary" data-pick="docx" data-i18n="browseWord">Parcourir… (Word)</button>
-      <button type="button" class="btn" data-pick="pdf" data-i18n="browsePdf">Parcourir… (PDF)</button>
-    </div>
     <span class="note" data-i18n="staysLocal">Le fichier reste sur ton ordinateur.</span>
-  </div>
+  </button>
   <input type="file" id="fileInput" accept=".docx,.pdf" class="sr" tabindex="-1" aria-hidden="true">
 
   <div id="hasFile" class="view" hidden>

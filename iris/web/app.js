@@ -182,7 +182,7 @@
     S.file = null;
     idle();
     render();
-    document.querySelector('[data-pick]').focus();
+    $('noFile').focus();
   }
   function upload(file) {
     if (S.reading || busy()) return;
@@ -301,7 +301,7 @@
     $('hasFile').hidden = !file;
     $('noFile').classList.toggle('busy', S.reading || S.dialog);
     $('dzTitle').textContent = S.reading ? t('reading') : S.dialog ? t('dialogOpen') : t('dropTitle');
-    document.querySelectorAll('[data-pick]').forEach(function (b) { b.disabled = S.reading || S.dialog; });
+    $('noFile').disabled = S.reading || S.dialog;
     if (!file) return;
 
     $('srcExt').textContent = c.ext.toUpperCase();
@@ -596,9 +596,6 @@
   /* ---------- Événements ---------- */
   document.querySelectorAll('[data-view]').forEach(function (b) {
     b.addEventListener('click', function () { show(b.dataset.view); });
-  });
-  document.querySelectorAll('[data-pick]').forEach(function (b) {
-    b.addEventListener('click', function (event) { event.stopPropagation(); pick(b.dataset.pick); });
   });
   $('noFile').addEventListener('click', function () { pick('any'); });
   $('fileInput').addEventListener('click', function (event) { event.stopPropagation(); });

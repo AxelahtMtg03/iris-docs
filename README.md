@@ -78,7 +78,7 @@ n'est disponible (`python run.py --browser` pour le forcer).
 Le résultat s'appelle `Nom.ext`, ou `Nom_en.ext` après traduction. Rien n'est écrasé : un
 fichier existant donne `Nom_1.ext`, `Nom_2.ext`…
 
-**Où est enregistré le résultat ?** Avec « Parcourir… », à côté du fichier source. Un fichier
+**Où est enregistré le résultat ?** Choisi en cliquant sur la zone, à côté du fichier source. Un fichier
 *glissé* dans la fenêtre n'indique pas son dossier d'origine : le résultat va alors dans
 `Téléchargements/Iris`. Tu peux imposer un dossier dans les réglages.
 
