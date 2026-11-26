@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iris — Traduis. Sans rien casser.</title>
+<meta name="description" content="Iris convertit et traduit tes documents Word et PDF sur ton ordinateur, en gardant leur mise en page. Gratuit, hors-ligne, open source.">
+<link rel="icon" href="assets/iris.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin>
+<script src="js/theme.js"></script>
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#contenu" data-i18n="skip">Aller au contenu</a>
+
+<header class="top">
+<div class="wrap bar">
+  <a href="#contenu" class="brand">
+    <svg viewBox="0 0 64 64" width="30" height="30" aria-hidden="true"><path d="M32 4C44 18 44 42 32 56C20 42 20 18 32 4Z" fill="currentColor"/><path class="vein" d="M32 14V62" fill="none" stroke-width="3.5" stroke-linecap="round"/></svg>
+    <span>Iris</span>
+  </a>
+  <div class="bar-end">
+    <nav id="menu" class="menu" data-i18n-label="navLabel" aria-label="Navigation">
+      <a href="#langues" data-i18n="navLanguages">Langues</a>
+      <a href="#atouts" data-i18n="navFeatures">Atouts</a>
+      <a href="#apercu" data-i18n="navPreview">Aperçu</a>
+    </nav>
+    <select id="lang" class="lang" data-i18n-label="language" aria-label="Langue">
+      <option value="fr">FR</option><option value="en">EN</option><option value="es">ES</option>
+    </select>
+    <button type="button" class="round" id="themeBtn" data-i18n-label="themeToggle" aria-label="Changer de thème"><span class="i-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="i-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+    <a class="btn btn-primary btn-nav" href="#telecharger" data-i18n="download">Télécharger</a>
+    <button type="button" class="round burger" id="burger" aria-expanded="false" aria-controls="menu" data-i18n-label="menu" aria-label="Menu"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+</div>
+</header>
+
+<main id="contenu">
+
+<section class="hero">
+<div class="blob blob-a glw" aria-hidden="true"></div>
+<div class="blob blob-b glw" aria-hidden="true"></div>
+<div class="wrap hero-in">
+  <p class="kicker rise" data-i18n="kicker">Traducteur de documents</p>
+  <h1 class="grad rise d1" data-i18n="heroTitle">Traduis.
+Sans rien casser.</h1>
+  <p class="lead rise d2" data-i18n="heroLead">Iris convertit et traduit tes documents Word et PDF sur ton ordinateur, en changeant la mise en page le moins possible. Gratuit, hors-ligne, open source.</p>
+  <div class="cta rise d3">
+    <a class="btn btn-primary btn-big" href="#telecharger" data-i18n="download">Télécharger</a>
+    <a class="btn btn-glass btn-big glass" href="#apercu" data-i18n="seeApp">Voir l'application</a>
+  </div>
+
+  <div id="tiltZone" class="scene" aria-hidden="true">
+  <div class="scene-scale">
+  <div class="sway">
+  <div id="stage" class="stage3d">
+    <div class="fl side-card side-left">
+      <div class="glass doc doc-left"><span class="tag tag-amber">FR</span><strong>Introduction</strong><span>Ce rapport présente les résultats du stage effectué au sein de l'entreprise.</span><div class="line"></div><div class="line w70"></div></div>
+    </div>
+    <div class="fl2 side-card side-right">
+      <div class="glass doc doc-right"><span class="tag tag-sky">EN</span><strong>Introduction</strong><span>This report presents the results of the internship carried out at the company.</span><div class="line"></div><div class="line w70"></div></div>
+    </div>
+    <div class="mock-pos">
+      <div class="glass mock">
+        <div class="mock-bar"><i></i><i></i><i></i><span>Iris</span></div>
+        <div class="mock-body">
+          <div class="mock-file"><span>Rapport_stage.docx</span><small>FR → EN</small></div>
+          <div class="mock-langs"><span class="on">Français</span><em>⇄</em><span>English</span></div>
+          <div class="mock-progress"><small data-i18n="mockRunning">Traduction en cours</small><div class="track"><div class="prog"></div></div></div>
+          <span class="mock-go" data-i18n="mockButton">Traduire</span>
+        </div>
+      </div>
+    </div>
+    <div class="fl2 float float-a"><div class="glass chip">FR → EN</div></div>
+    <div class="fl float float-b"><div class="glass chip" data-i18n="mockOffline">100 % hors-ligne</div></div>
+    <div class="fl float float-c"><div class="glass app-icon"><svg viewBox="0 0 64 64" width="38" height="38"><path d="M32 4C44 18 44 42 32 56C20 42 20 18 32 4Z" fill="currentColor"/><path class="vein" d="M32 14V62" fill="none" stroke-width="3.5" stroke-linecap="round"/></svg></div></div>
+  </div>
+  </div>
+  </div>
+  </div>
+</div>
+</section>
+
+<section id="langues" class="langs">
+<div class="wrap split">
+  <div class="reveal cube-zone" aria-hidden="true">
+    <div class="cube">
+      <div class="glass f1">FR</div><div class="glass f2">EN</div><div class="glass f3">ES</div>
+      <div class="glass f4">⇄</div><div class="glass f5"></div><div class="glass f6"></div>
+    </div>
+  </div>
+  <div class="reveal split-text">
+    <h2 class="grad" data-i18n="langsTitle">Trois langues.
+Une seule forme.</h2>
+    <p data-i18n="langsText">Français, anglais et espagnol, dans tous les sens. Le passage français ↔ espagnol transite par l'anglais, avec une qualité un peu inférieure aux paires directes.</p>
+  </div>
+</div>
+</section>
+
+<section id="atouts" class="features">
+<div class="wrap rows">
+  <div class="row">
+    <article class="glass card tilt reveal grow2 layout-card">
+      <div class="card-text">
+        <h3 class="grad" data-i18n="layoutTitle">Même mise en page.</h3>
+        <p data-i18n="layoutText">Dans un document Word, polices, marges, images et tableaux restent en place : seul le texte change. Un texte plus long peut déplacer des sauts de ligne, et Iris te le signale.</p>
+      </div>
+      <div class="layers" aria-hidden="true"><div class="plane"><div class="p1"></div><div class="p2 lay2"></div><div class="p3 lay3"><strong>Introduction</strong><div class="line"></div><div class="line w70"></div><div class="line w85"></div></div></div></div>
+    </article>
+    <article class="glass card tilt reveal">
+      <div class="icon glw" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5.5 12.5a10 10 0 0 1 13 0"/><path d="M9 16.2a5 5 0 0 1 6 0"/><path d="M12 20h.01"/><path d="m4 3 16 18"/></svg></div>
+      <h3 class="grad spaced" data-i18n="offlineTitle">Hors-ligne.</h3>
+      <p data-i18n="offlineText">Les modèles de langue se téléchargent une seule fois. Ensuite, coupe le réseau : tout fonctionne.</p>
+    </article>
+  </div>
+  <div class="row">
+    <article class="glass card short tilt reveal between">
+      <span class="gradw huge" data-i18n="price">0 €</span>
+      <p data-i18n="freeText">Gratuit et open source. Pas de compte, pas de clé d'API, pas de limite de caractères.</p>
+    </article>
+    <article class="glass card short tilt reveal grow2 formats">
+      <div class="card-text">
+        <h3 class="grad" data-i18n="formatsTitle">Word et PDF.</h3>
+        <p data-i18n="formatsText">Les .docx sont traités directement. Les PDF passent par un document Word intermédiaire, et les scans sont lus par reconnaissance de caractères.</p>
+      </div>
+      <div class="files" aria-hidden="true"><div class="fl glass file-docx">DOCX</div><div class="fl2 glass file-pdf">PDF</div></div>
+    </article>
+  </div>
+  <div class="row">
+    <article class="glass card short tilt reveal">
+      <h3 class="grad" data-i18n="convertTitle">Convertir, tout simplement.</h3>
+      <p data-i18n="convertText">Word vers PDF ou PDF vers Word, sans rien traduire. La traduction est une option que tu actives quand tu en as besoin.</p>
+    </article>
+    <article class="glass card short tilt reveal">
+      <h3 class="grad" data-i18n="privateTitle">Local et privé.</h3>
+      <p data-i18n="privateText">Tes fichiers ne quittent jamais ton ordinateur. Aucun serveur distant, aucune statistique, aucun suivi.</p>
+    </article>
+    <article class="glass card short tilt reveal">
+      <h3 class="gradw" data-i18n="trioTitle">FR · EN · ES</h3>
+      <p data-i18n="trioText">Six sens de traduction avec deux paires de modèles, et une interface dans les trois langues.</p>
+    </article>
+  </div>
+</div>
+</section>
+
+<section class="how" aria-labelledby="howTitle">
+<div class="wrap steps">
+  <h2 id="howTitle" class="grad reveal" data-i18n="howTitle">Comment ça marche</h2>
+  <div class="step"><span class="gradw word" data-parallax="1" data-i18n="step1">Dépose.</span><span class="step-text" data-i18n="step1Text">Glisse un document Word ou un PDF dans la fenêtre.</span></div>
+  <div class="step"><span class="gradw word" data-parallax="-1" data-i18n="step2">Choisis.</span><span class="step-text" data-i18n="step2Text">Format de sortie et, si tu veux, langue d'origine et langue d'arrivée.</span></div>
+  <div class="step"><span class="gradw word" data-parallax="1" data-i18n="step3">Récupère.</span><span class="step-text" data-i18n="step3Text">Un nouveau fichier apparaît. L'original reste intact.</span></div>
+</div>
+</section>
+
+<section id="apercu" class="preview">
+<div class="wrap">
+  <h2 class="grad reveal" data-i18n="previewTitle">L'application.</h2>
+  <p class="reveal" data-i18n="previewText">Une fenêtre, quatre onglets, aucun réglage obligatoire.</p>
+  <figure class="reveal shot glass">
+    <img class="only-dark" src="assets/app-dark.webp" width="1148" height="1363" loading="lazy" data-i18n-alt="shotAlt" alt="L'application Iris après la traduction d'un rapport : aperçu, boutons et rapport de fidélité.">
+    <img class="only-light" src="assets/app-light.webp" width="1148" height="1363" loading="lazy" data-i18n-alt="shotAlt" alt="L'application Iris après la traduction d'un rapport : aperçu, boutons et rapport de fidélité.">
+  </figure>
+</div>
+</section>
+
+<section id="telecharger" class="get">
+<div class="narrow">
+  <div class="glowb reveal">
+  <div class="get-card">
+    <div class="get-text">
+      <h2 class="grad" data-i18n="getTitle">Prends-le.</h2>
+      <p data-i18n="getText">Gratuit et open source. Récupère le projet avec Git, puis lance-le comme une appli ou une page locale. Il faut Python 3.10 ou plus.</p>
+      <p class="small" data-i18n="getTools">Pour créer des PDF, installe LibreOffice ; pour lire les scans, Tesseract OCR.</p>
+    </div>
+    <div class="get-code">
+      <pre id="commands" tabindex="0" data-i18n-label="commandsLabel" aria-label="Commandes d'installation">git clone https://github.com/&lt;mon-pseudo&gt;/iris-docs
+cd iris-docs
+pip install -r requirements.txt
+python run.py</pre>
+      <div class="get-actions">
+        <button type="button" class="btn btn-primary" id="copy" data-i18n="copy">Copier</button>
+        <a class="btn btn-glass" id="zip" href="#" data-i18n="zip">Télécharger le ZIP</a>
+      </div>
+      <span id="copied" class="small" role="status" aria-live="polite"></span>
+      <span class="small" data-i18n="soon">Application de bureau à double-cliquer : à venir.</span>
+    </div>
+  </div>
+  </div>
+</div>
+</section>
+</main>
+
+<footer class="foot">
+<div class="wrap foot-in">
+  <span>Iris · open source</span>
+  <a id="license" href="#" data-i18n="license">Licence MIT</a>
+  <a id="repo" href="#" data-i18n="repo">Dépôt</a>
+  <a id="bug" href="#" data-i18n="bug">Signaler un bug</a>
+</div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
