@@ -169,8 +169,8 @@ Une seule forme.</h2>
   <div class="get-card">
     <div class="get-text">
       <h2 class="grad" data-i18n="getTitle">Prends-le.</h2>
-      <p data-i18n="getText">Gratuit et open source. Récupère le projet avec Git, puis lance-le comme une appli ou une page locale. Il faut Python 3.10 ou plus.</p>
-      <p class="small" data-i18n="getTools">Pour créer des PDF, installe LibreOffice ; pour lire les scans, Tesseract OCR.</p>
+      <p data-i18n="getText">Gratuit et open source. Sous Windows : télécharge le ZIP, extrais-le, puis double-clique sur Installer. Tout s’installe tout seul.</p>
+      <p class="small" data-i18n="getTools">Sur macOS et Linux, suis les commandes ci-contre ; LibreOffice et Tesseract s’installent à part.</p>
     </div>
     <div class="get-code">
       <pre id="commands" tabindex="0" data-i18n-label="commandsLabel" aria-label="Commandes d'installation">git clone https://github.com/AxelahtMtg03/iris-docs
@@ -178,11 +178,11 @@ cd iris-docs
 pip install -r requirements.txt
 python run.py</pre>
       <div class="get-actions">
-        <button type="button" class="btn btn-primary" id="copy" data-i18n="copy">Copier</button>
-        <a class="btn btn-glass" id="zip" href="#" data-i18n="zip">Télécharger le ZIP</a>
+        <a class="btn btn-primary" id="zip" href="#" data-i18n="zip">Télécharger le ZIP</a>
+        <button type="button" class="btn btn-glass" id="copy" data-i18n="copy">Copier</button>
       </div>
       <span id="copied" class="small" role="status" aria-live="polite"></span>
-      <span class="small" data-i18n="soon">Pour un raccourci sur le bureau : python -m iris install</span>
+      <span class="small" data-i18n="soon">Windows peut afficher un avertissement : « Informations complémentaires », puis « Exécuter quand même ».</span>
     </div>
   </div>
   </div>

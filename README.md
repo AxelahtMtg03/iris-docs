@@ -11,7 +11,19 @@ Internet ne sert qu'une fois, pour installer le projet et télécharger les mod�
 | ![Iris en thème sombre](docs/captures/app-dark.webp) | ![Iris en thème clair](docs/captures/app-light.webp) |
 
 ## Installation
+### Windows : en un double-clic
+1. [Télécharge le ZIP](https://github.com/AxelahtMtg03/iris-docs/archive/refs/heads/main.zip).
+2. Clic droit sur le fichier téléchargé, puis **Extraire tout**.
+3. Dans le dossier obtenu, double-clique sur **Installer** (`Installer.bat`). Si Windows affiche
+   « Windows a protégé votre ordinateur », clique sur **Informations complémentaires** puis
+   **Exécuter quand même**.
 
+Tout s'installe : Python, les composants, LibreOffice, Tesseract, les modèles de traduction et le
+raccourci. Compte 10 à 20 minutes et environ 3 Go ; Windows peut demander ton autorisation.
+Iris s'ouvre à la fin et le dossier téléchargé peut être supprimé. Pour mettre à jour,
+recommence avec le nouveau ZIP.
+
+### Installation manuelle (macOS, Linux, développement)
 Il faut **Python 3.10 ou plus récent** et environ 2 Go d'espace disque.
 
 ```bash

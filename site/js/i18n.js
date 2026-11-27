@@ -22,10 +22,10 @@ window.IRIS_I18N = {
     step3: 'Récupère.', step3Text: 'Un nouveau fichier apparaît. L\'original reste intact.',
     previewTitle: 'L\'application.', previewText: 'Une fenêtre, quatre onglets, aucun réglage obligatoire.',
     shotAlt: 'L\'application Iris après la traduction d\'un rapport : aperçu, boutons et rapport de fidélité.',
-    getTitle: 'Prends-le.', getText: 'Gratuit et open source. Récupère le projet avec Git, puis lance-le comme une appli ou une page locale. Il faut Python 3.10 ou plus.',
-    getTools: 'Pour créer des PDF, installe LibreOffice ; pour lire les scans, Tesseract OCR.',
+    getTitle: 'Prends-le.', getText: 'Gratuit et open source. Sous Windows : télécharge le ZIP, extrais-le, puis double-clique sur Installer. Tout s’installe tout seul.',
+    getTools: 'Sur macOS et Linux, suis les commandes ci-contre ; LibreOffice et Tesseract s’installent à part.',
     commandsLabel: 'Commandes d\'installation', copy: 'Copier', copied: 'Commandes copiées.', copyFailed: 'Copie impossible : sélectionne le texte.',
-    zip: 'Télécharger le ZIP', soon: 'Pour un raccourci sur le bureau : python -m iris install',
+    zip: 'Télécharger le ZIP', soon: 'Windows peut afficher un avertissement : « Informations complémentaires », puis « Exécuter quand même ».',
     license: 'Licence MIT', repo: 'Dépôt', bug: 'Signaler un bug'
   },
   en: {
@@ -51,10 +51,10 @@ window.IRIS_I18N = {
     step3: 'Collect.', step3Text: 'A new file appears. The original stays untouched.',
     previewTitle: 'The app.', previewText: 'One window, four tabs, no mandatory settings.',
     shotAlt: 'The Iris app after translating a report: preview, buttons and fidelity report.',
-    getTitle: 'Take it.', getText: 'Free and open source. Get the project with Git, then run it as an app or a local page. You need Python 3.10 or later.',
-    getTools: 'To create PDFs, install LibreOffice; to read scans, Tesseract OCR.',
+    getTitle: 'Take it.', getText: 'Free and open source. On Windows: download the ZIP, extract it, then double-click Installer. Everything installs by itself.',
+    getTools: 'On macOS and Linux, use the commands shown here; LibreOffice and Tesseract are installed separately.',
     commandsLabel: 'Installation commands', copy: 'Copy', copied: 'Commands copied.', copyFailed: 'Could not copy: select the text.',
-    zip: 'Download the ZIP', soon: 'For a desktop shortcut: python -m iris install',
+    zip: 'Download the ZIP', soon: 'Windows may show a warning: “More info”, then “Run anyway”.',
     license: 'MIT licence', repo: 'Repository', bug: 'Report a bug'
   },
   es: {
@@ -80,10 +80,10 @@ window.IRIS_I18N = {
     step3: 'Recoge.', step3Text: 'Aparece un archivo nuevo. El original queda intacto.',
     previewTitle: 'La aplicación.', previewText: 'Una ventana, cuatro pestañas, ningún ajuste obligatorio.',
     shotAlt: 'La aplicación Iris tras traducir un informe: vista previa, botones e informe de fidelidad.',
-    getTitle: 'Llévatelo.', getText: 'Gratis y de código abierto. Descarga el proyecto con Git y ejecútalo como aplicación o página local. Necesitas Python 3.10 o superior.',
-    getTools: 'Para crear PDF, instala LibreOffice; para leer escaneados, Tesseract OCR.',
+    getTitle: 'Llévatelo.', getText: 'Gratis y de código abierto. En Windows: descarga el ZIP, extráelo y haz doble clic en Installer. Todo se instala solo.',
+    getTools: 'En macOS y Linux, usa estos comandos; LibreOffice y Tesseract se instalan aparte.',
     commandsLabel: 'Comandos de instalación', copy: 'Copiar', copied: 'Comandos copiados.', copyFailed: 'No se pudo copiar: selecciona el texto.',
-    zip: 'Descargar el ZIP', soon: 'Para un acceso directo en el escritorio: python -m iris install',
+    zip: 'Descargar el ZIP', soon: 'Windows puede mostrar un aviso: «Más información» y luego «Ejecutar de todas formas».',
     license: 'Licencia MIT', repo: 'Repositorio', bug: 'Informar de un error'
   }
 };
