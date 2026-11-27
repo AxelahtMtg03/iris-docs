@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import contextlib
 import io
 import os
 import re
@@ -183,8 +182,11 @@ def _kill_tree(process: subprocess.Popen) -> None:  # type: ignore[type-arg]
             **_no_window(),
         )
     else:
-        with contextlib.suppress(ProcessLookupError):
+        try:
             os.killpg(process.pid, signal.SIGKILL)
+        except (ProcessLookupError, PermissionError):
+            # macOS refuse (EPERM) un groupe en train de s'éteindre : on vise alors le processus.
+            process.kill()
     process.wait(timeout=30)
 
 
