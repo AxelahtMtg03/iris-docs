@@ -116,7 +116,11 @@ _PROTECTED = re.compile(
     r"|\{\{[^{}]*\}\}|\$\{[^{}]*\}|«[A-Z0-9_]+»|%[A-Z_]{2,}%"
     r"|(?:[A-Za-z]:\\|~/|\./)[^\s,;]*[^\s,;.]"
     r"|\b\w+(?:_\w+)+(?:\.\w+)?\b"
+    r"|(?<= )&(?= )"  # « Dupont & Durand » : le signe devient sinon une apostrophe
+    # Les modèles avalent les signes mathématiques : le signe reste collé à son nombre.
+    r"|[∼≈≃±≤≥]\s?(?:\d+(?:[.,   ]\d+)*(?:\s?%)?)?"
 )
+_SIGNED_DECIMAL = re.compile(r"([∼≈≃±≤≥]\s?\d+),(\d{1,2})(?!\d)")
 _NUMBER = re.compile(r"\d+(?:[   .,:/-]\d+)*")
 
 
@@ -208,7 +212,10 @@ def translator(source: str, target: str) -> Callable[[str, list[str]], str]:
     def translate(text: str, keep: Sequence[str] = ()) -> str:
         if not any(c.isalpha() for c in text):
             return text
-        return protect(text, keep, run)
+        result = protect(text, keep, run)
+        if target == "en":  # le nombre recopié avec son signe prend le point décimal anglais
+            result = _SIGNED_DECIMAL.sub(r"\1.\2", result)
+        return result
 
     return translate
 

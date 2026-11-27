@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import re
+from collections.abc import Iterable
+
 # Polices TeX sans table Unicode : les ligatures sortent comme des caractères de contrôle.
 # Codage T1 (0x1B-0x1F) et OT1 (0x0B-0x0F).
 TEX_LIGATURES = {
@@ -26,7 +29,37 @@ TEX_PUNCTUATION = {
     "\x15": "–",
     "\x16": "—",
 }
-TEX_CHARACTERS = TEX_LIGATURES | TEX_PUNCTUATION
+# La puce des listes (police de symboles TS1) sort aussi comme un caractère de contrôle.
+TEX_CHARACTERS = TEX_LIGATURES | TEX_PUNCTUATION | {"\x88": "•"}
+
+# Polices « F47 » sans table Unicode : le même code désigne un signe ou une lettre selon la police.
+_TEX_FONT = re.compile(r"F\d+")
+_TS1_SYMBOLS = {
+    "\x88": "•",
+    "\xd6": "×",
+    "\xf6": "÷",
+    "\xb0": "°",
+    "\xb1": "±",
+    "\xb5": "µ",
+}
+_T1_LETTERS = {"\xf7": "œ", "\xd7": "Œ"}
+
+
+def tex_font_characters(spans: Iterable[tuple[str, str]]) -> dict[str, dict[str, str]]:
+    """Corrections propres à chaque police TeX d'une page, d'après les couples (police, texte).
+
+    Une police qui n'écrit que des signes est la police de symboles ; une police qui écrit des
+    lettres est une police de texte.
+    """
+    seen: dict[str, set[str]] = {}
+    for font, text in spans:
+        if _TEX_FONT.fullmatch(font):
+            seen.setdefault(font, set()).update(text.replace(" ", ""))
+    return {
+        font: _TS1_SYMBOLS if characters <= _TS1_SYMBOLS.keys() else _T1_LETTERS
+        for font, characters in seen.items()
+        if characters <= _TS1_SYMBOLS.keys() or any(c.isascii() and c.isalpha() for c in characters)
+    }
 
 
 def repair_pdf2docx() -> None:

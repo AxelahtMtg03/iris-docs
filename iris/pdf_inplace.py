@@ -23,7 +23,7 @@ import pymupdf
 
 from .docx_inplace import Translate, distribute, locate
 from .errors import Cancelled
-from .pdf_text import TEX_CHARACTERS
+from .pdf_text import TEX_CHARACTERS, tex_font_characters
 
 _FLAGS = pymupdf.TEXT_MEDIABOX_CLIP | pymupdf.TEXT_CID_FOR_UNKNOWN_UNICODE
 _MARKER = re.compile(r"^(?:\d+(?:\.\d+)*\.?|[A-Z]\.(?:\d+\.?)*|[•‣▪–—∗*·]|\([\divx]+\))$")
@@ -126,15 +126,23 @@ class Stats:
 def _lines(page: pymupdf.Page) -> list[tuple[int, list[Char]]]:
     """Caractères horizontaux de la page, regroupés par bloc et par ligne de base."""
     result = []
-    for number, block in enumerate(page.get_text("rawdict", flags=_FLAGS)["blocks"]):
+    blocks = page.get_text("rawdict", flags=_FLAGS)["blocks"]
+    corrections = tex_font_characters(
+        (span["font"], "".join(raw["c"] for raw in span["chars"]))
+        for block in blocks
+        for line in block.get("lines", [])
+        for span in line["spans"]
+    )
+    for number, block in enumerate(blocks):
         rows: list[list[Char]] = []
         for line in block.get("lines", []):
             if abs(line["dir"][0] - 1) > 0.01:
                 continue  # texte tourné : laissé tel quel
             for span in line["spans"]:
+                fixed = TEX_CHARACTERS | corrections.get(span["font"], {})
                 for raw in span["chars"]:
                     char = Char(
-                        TEX_CHARACTERS.get(raw["c"], raw["c"]),
+                        fixed.get(raw["c"], raw["c"]),
                         pymupdf.Rect(raw["bbox"]),
                         raw["origin"][1],
                         span["size"],
