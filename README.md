@@ -4,7 +4,8 @@ Convertit des documents **Word** et **PDF** et, si tu le souhaites, les **tradui
 anglais ou espagnol, en changeant la mise en page le moins possible.
 
 Gratuit, open source, sans compte et sans cloud : tes fichiers ne quittent jamais ton ordinateur.
-Internet ne sert qu'une fois, pour installer le projet et télécharger les modèles de langue.
+Internet sert à installer le projet et les modèles de langue, puis seulement à savoir si une
+nouvelle version existe (désactivable dans les réglages).
 
 | Thème sombre | Thème clair |
 | --- | --- |
@@ -20,8 +21,11 @@ Internet ne sert qu'une fois, pour installer le projet et télécharger les mod�
 
 Tout s'installe : Python, les composants, LibreOffice, Tesseract, les modèles de traduction et le
 raccourci. Compte 10 à 20 minutes et environ 3 Go ; Windows peut demander ton autorisation.
-Iris s'ouvre à la fin et le dossier téléchargé peut être supprimé. Pour mettre à jour,
-recommence avec le nouveau ZIP.
+Iris s'ouvre à la fin et le dossier téléchargé peut être supprimé.
+
+**Mises à jour.** Au démarrage, Iris signale une nouvelle version : clique sur **Mettre à jour**,
+l'application se ferme, s'installe et se rouvre. Rien ne s'installe sans ce clic. Depuis un
+dossier de code, mets à jour avec `git pull`.
 
 ### Installation manuelle (macOS, Linux, développement)
 Il faut **Python 3.10 ou plus récent** et environ 2 Go d'espace disque.
@@ -48,7 +52,7 @@ python run.py
 ```
 
 Au premier lancement, ouvre **Langues installées** et clique sur **Installer** (environ 600 Mo
-pour les deux paires). C'est la seule fois où Iris utilise internet.
+pour les deux paires). La traduction se fait ensuite hors-ligne.
 
 ### L'installer comme une application
 
@@ -131,8 +135,13 @@ python -m iris models install
 ## Confidentialité et sécurité
 
 Le serveur n'écoute que sur `127.0.0.1`, exige un jeton tiré au hasard à chaque lancement,
-vérifie le type réel des fichiers et supprime ses fichiers temporaires. Aucun appel réseau n'a
-lieu en dehors du téléchargement des modèles, que tu déclenches toi-même.
+vérifie le type réel des fichiers et supprime ses fichiers temporaires. Les seuls appels réseau
+sont le téléchargement des modèles et des mises à jour, que tu déclenches toi-même, et la
+lecture du numéro de version sur GitHub au démarrage (désactivable dans les réglages). Aucun
+document n'est envoyé.
+
+**Publier une version** (mainteneur) : augmente `__version__` dans `iris/__init__.py`, puis
+pousse sur `main`.
 
 Historique, réglages et journal (`iris.log`) sont enregistrés dans `%LOCALAPPDATA%\Iris`,
 `~/Library/Application Support/Iris` ou `~/.local/share/iris`.

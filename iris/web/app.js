@@ -18,7 +18,7 @@
     view: 'document', app: null,
     file: null, reading: false, dialog: false,
     fmt: 'other', trad: false, srcChoice: 'auto', dst: 'en',
-    stage: 'idle', job: null, result: null, notice: null,
+    stage: 'idle', job: null, result: null, notice: null, update: null,
     history: [], downloads: {}, customOut: false
   };
   var pollTimer = null;
@@ -550,6 +550,7 @@
     if (document.activeElement !== $('outPath')) $('outPath').value = settings.out_dir;
     $('outHelp').textContent = custom ? t('outHelpCustom') : t('outHelpSource', { folder: S.app.default_out_dir });
     $('openAfter').setAttribute('aria-checked', settings.open_after ? 'true' : 'false');
+    $('checkUpdates').setAttribute('aria-checked', settings.check_updates ? 'true' : 'false');
     if (document.activeElement !== $('maxMb')) $('maxMb').value = settings.max_mb;
     var tools = [['LibreOffice', S.app.tools.libreoffice], ['Tesseract OCR', S.app.tools.tesseract]];
     $('toolList').textContent = '';
@@ -560,6 +561,35 @@
     var missing = tools.filter(function (x) { return !x[1]; }).map(function (x) { return x[0]; });
     $('toolHelp').textContent = missing.length ? t('toolHelpMissing', { list: missing.join(', ') }) : t('toolHelpOk');
     $('about').textContent = t('about', { version: S.app.version, log: S.app.log_file });
+  }
+
+  /* ---------- Mise à jour ---------- */
+  function checkUpdate() {
+    if (!S.app.settings.check_updates) return;
+    // Hors-ligne, la vérification échoue sans rien afficher.
+    api('GET', '/api/update').then(function (found) {
+      if (found.available) { S.update = found; render(); }
+    }).catch(function () {});
+  }
+  function renderUpdate() {
+    var found = S.update;
+    $('update').hidden = !found || !S.app.settings.check_updates;
+    if ($('update').hidden) return;
+    $('updateText').textContent = t(found.step || 'updateReady', { version: found.latest });
+    $('updateBtn').hidden = !found.can_install || found.step === 'updateClose';
+    $('updateBtn').disabled = !!found.step || busy();
+    $('updateLink').hidden = found.can_install;
+    $('updateLink').href = found.url;
+    $('updateLater').hidden = !!found.step;
+  }
+  function installUpdate() {
+    var found = S.update;
+    found.step = 'updating'; S.notice = null; render();
+    api('POST', '/api/update').then(function () {
+      found.step = 'updateClose'; render();
+      var bridge = desktopWindow();
+      if (bridge) bridge.window_close();
+    }).catch(function (error) { delete found.step; showError(error); });
   }
 
   function render() {
@@ -575,6 +605,7 @@
       $('noticeDetails').hidden = !S.notice.detail;
       $('noticeDetail').textContent = S.notice.detail;
     }
+    renderUpdate();
     renderDocument();
     renderFooter();
     if (S.view === 'history') renderHistory();
@@ -659,6 +690,12 @@
     if (S.app) saveSettings({ theme: next });
   });
   $('openAfter').addEventListener('click', function () { saveSettings({ open_after: !S.app.settings.open_after }); });
+  $('checkUpdates').addEventListener('click', function () {
+    var on = !S.app.settings.check_updates;
+    saveSettings({ check_updates: on }).then(function () { if (on) checkUpdate(); });
+  });
+  $('updateBtn').addEventListener('click', installUpdate);
+  $('updateLater').addEventListener('click', function () { S.update = null; render(); });
   $('maxMb').addEventListener('change', function () {
     var value = Math.round(Number(this.value));
     value = Math.min(2000, Math.max(1, value || S.app.settings.max_mb));
@@ -686,6 +723,7 @@
     translatePage();
     render();
     state.downloads.forEach(watchDownload);
+    checkUpdate();
     document.body.dataset.ready = '1';
   }).catch(function (error) {
     if (!error.silent) { $('fatalText').textContent = error.message; $('fatal').hidden = false; }

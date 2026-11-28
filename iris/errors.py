@@ -137,6 +137,11 @@ MESSAGES: dict[str, dict[str, str]] = {
         "en": "The conversion failed. The document may use an unsupported feature.",
         "es": "La conversión ha fallado. Puede que el documento use un elemento no compatible.",
     },
+    "update_failed": {
+        "fr": "La mise à jour a échoué. Vérifie ta connexion internet puis réessaie.",
+        "en": "The update failed. Check your internet connection and try again.",
+        "es": "La actualización ha fallado. Comprueba tu conexión e inténtalo de nuevo.",
+    },
     "timeout": {
         "fr": "La conversion a pris trop de temps et a été interrompue.",
         "en": "The conversion took too long and was stopped.",

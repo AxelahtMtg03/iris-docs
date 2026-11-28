@@ -17,7 +17,17 @@ from typing import Any
 from flask import Flask, jsonify, request, send_file, send_from_directory
 from werkzeug.exceptions import HTTPException, RequestEntityTooLarge
 
-from . import __version__, convert, docx_inplace, models, pipeline, storage, system, translate
+from . import (
+    __version__,
+    convert,
+    docx_inplace,
+    models,
+    pipeline,
+    storage,
+    system,
+    translate,
+    update,
+)
 from .errors import IrisError, message
 from .jobs import Job, JobManager
 
@@ -170,6 +180,21 @@ def create_app(
         if not isinstance(changes, dict):
             raise IrisError("bad_request")
         return jsonify(storage.save_settings(changes))
+
+    # ------------------------------------------------------------ mises à jour
+
+    @app.get("/api/update")
+    def check_update():  # type: ignore[no-untyped-def]
+        if not storage.load_settings()["check_updates"]:
+            return jsonify(available=False)
+        return jsonify(update.check())
+
+    @app.post("/api/update")
+    def install_update():  # type: ignore[no-untyped-def]
+        if manager.active("document") or manager.active("model"):
+            raise IrisError("busy")
+        update.start()
+        return jsonify(ok=True)
 
     # ------------------------------------------------------------ fichiers
 

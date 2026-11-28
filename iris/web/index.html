@@ -50,6 +50,17 @@
 
 <main class="main">
 
+  <div id="update" class="card warn" role="status" hidden>
+    <div class="row-between">
+      <strong id="updateText"></strong>
+      <div class="item-actions">
+        <button type="button" class="btn btn-primary" id="updateBtn" data-i18n="updateNow">Mettre à jour</button>
+        <a class="btn btn-primary" id="updateLink" target="_blank" rel="noopener" data-i18n="updateGet">Télécharger</a>
+        <button type="button" class="btn" id="updateLater" data-i18n="updateLater">Plus tard</button>
+      </div>
+    </div>
+  </div>
+
   <div id="notice" class="card error" role="alert" hidden>
     <strong id="noticeText"></strong>
     <details id="noticeDetails" hidden><summary data-i18n="technical">Détail technique</summary><pre id="noticeDetail"></pre></details>
@@ -207,6 +218,13 @@
       <span id="openAfterLabel" data-i18n="openAfter">Ouvrir le dossier après la conversion</span>
       <button type="button" class="switch" id="openAfter" role="switch" aria-checked="false" aria-labelledby="openAfterLabel"></button>
     </div>
+  </div>
+  <div class="card">
+    <div class="row-between">
+      <span id="checkUpdatesLabel" data-i18n="checkUpdates">Vérifier les mises à jour au démarrage</span>
+      <button type="button" class="switch" id="checkUpdates" role="switch" aria-checked="false" aria-labelledby="checkUpdatesLabel"></button>
+    </div>
+    <span class="hint" data-i18n="checkUpdatesHelp">Seul le numéro de version est lu sur GitHub : aucun document n'est envoyé.</span>
   </div>
   <div class="card field" role="group" aria-labelledby="ocrLabel">
     <span class="label" id="ocrLabel" data-i18n="ocr">Reconnaissance de texte (OCR) sur les PDF scannés</span>

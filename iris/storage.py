@@ -21,6 +21,7 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "open_after": False,
     "ocr": "auto",
     "max_mb": 100,
+    "check_updates": True,
 }
 _CHOICES = {
     "theme": {"light", "dark", "system"},

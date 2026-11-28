@@ -5,7 +5,13 @@ title Installation d'Iris
 cd /d "%~dp0"
 if not exist installer.py goto unzip
 if not exist requirements.txt goto unzip
+if not defined IRIS_UPDATE goto welcome
+title Mise a jour d'Iris
+echo.
+echo   Mise a jour d'Iris : ne ferme pas cette fenetre.
+goto start
 
+:welcome
 echo.
 echo   Installation d'Iris
 echo.
@@ -16,6 +22,7 @@ echo.
 echo   Appuie sur une touche pour commencer (ou ferme la fenetre pour annuler).
 pause >nul
 
+:start
 call :find_python
 if defined PY goto install
 echo.
@@ -27,6 +34,7 @@ if not defined PY goto nopython
 :install
 %PY% installer.py
 if errorlevel 1 goto failed
+if defined IRIS_UPDATE exit /b
 echo.
 echo   Termine. Iris s'ouvre ; tu le retrouveras sur le bureau et dans le menu Demarrer.
 goto end

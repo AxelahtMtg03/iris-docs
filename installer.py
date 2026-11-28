@@ -12,8 +12,9 @@ import sys
 import urllib.request
 from pathlib import Path
 
+from iris.update import INSTALL_DIR as TARGET
+
 SOURCE = Path(__file__).resolve().parent
-TARGET = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "Programs" / "Iris"
 TOOLS = (
     ("LibreOffice (pour créer des PDF)", "find_soffice", "TheDocumentFoundation.LibreOffice"),
     ("Tesseract (pour lire les scans)", "find_tesseract", "UB-Mannheim.TesseractOCR"),
@@ -23,6 +24,22 @@ TESSDATA = "https://github.com/tesseract-ocr/tessdata_fast/raw/main/{}.trainedda
 
 def step(text: str) -> None:
     print(f"\n==> {text}", flush=True)
+
+
+def wait_for_exit(pid: int) -> None:
+    """Pendant une mise à jour, attend (une minute au plus) qu'Iris soit fermé."""
+    import ctypes
+    from ctypes import wintypes
+
+    kernel32 = ctypes.WinDLL("kernel32")
+    kernel32.OpenProcess.restype = wintypes.HANDLE
+    kernel32.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+    kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
+    handle = kernel32.OpenProcess(0x00100000, False, pid)  # droit d'attente seulement
+    if handle:
+        print("Fermeture d'Iris…", flush=True)
+        kernel32.WaitForSingleObject(handle, 60_000)
+        kernel32.CloseHandle(handle)
 
 
 def copy_app() -> None:
@@ -95,6 +112,8 @@ def main() -> int:
     if sys.platform != "win32":
         print("Cet installateur est réservé à Windows : suis le README.")
         return 1
+    if os.environ.get("IRIS_WAIT_PID", "").isdigit():
+        wait_for_exit(int(os.environ["IRIS_WAIT_PID"]))
     step(f"Copie d'Iris dans {TARGET}")
     copy_app()
     python = TARGET / ".venv" / "Scripts" / "python.exe"
@@ -123,7 +142,9 @@ def main() -> int:
         print("\nIris est installé, mais il manque :")
         for label in missing:
             print(f"  - {label}")
-    subprocess.Popen([str(python.with_name("pythonw.exe")), str(TARGET / "run.py")], cwd=TARGET)
+    clean = {k: v for k, v in os.environ.items() if k not in ("IRIS_UPDATE", "IRIS_WAIT_PID")}
+    command = [str(python.with_name("pythonw.exe")), str(TARGET / "run.py")]
+    subprocess.Popen(command, cwd=TARGET, env=clean)
     return 0
 
 
